@@ -28,7 +28,7 @@ embedding caches are not in this repository.
   NQ and NFCorpus, no consistent difference on SciFact) and worse on SIFT1M. It does not beat K-Means or HNSW.
 * Adaptive and learned routing improved both clusterings a little and did not change their ranking.
 
-The full tables are in `docs/`, and the raw numbers are in `cache_cross/` (JSON).
+The raw numbers are in `cache_cross/` (JSON).
 
 ## Running the experiments
 ```
@@ -44,7 +44,7 @@ The scripts expect the BEIR datasets and cached embeddings in the folders they c
 ## Layout
 ```
 *.py          experiment code (clustering, retrieval, cross-tests, routing)
-docs/         comparison tables and reports (Word)
 cache_cross/  saved result files (JSON)
 ```
 Embedding caches, datasets and the virtual environment are not tracked.
+
