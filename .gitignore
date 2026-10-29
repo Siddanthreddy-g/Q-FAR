@@ -1,0 +1,15 @@
+venv/
+__pycache__/
+cache/
+cache_nfcorpus_3633/
+cache_nq_200000/
+cache_scifact_5183/
+datasets/
+*.npy
+*.npz
+*.pkl
+*.pt
+*.zip
+*.gz
+*.tar
+.vscode/

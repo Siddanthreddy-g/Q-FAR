@@ -1,0 +1,122 @@
+[
+  {
+    "method": "previous: K-Means (scratch)",
+    "params": "K=64, search=1",
+    "overlap@10": 0.5727000000000001,
+    "NN_in_top1": 0.629,
+    "NN_in_top10": 0.629,
+    "ms_per_query": 1.037097454071045,
+    "avg_vectors_searched": 3396.488,
+    "pct_of_base": 1.6982439999999999
+  },
+  {
+    "method": "previous: K-Means (scratch)",
+    "params": "K=64, search=2",
+    "overlap@10": 0.7714000000000001,
+    "NN_in_top1": 0.823,
+    "NN_in_top10": 0.823,
+    "ms_per_query": 2.0158183574676514,
+    "avg_vectors_searched": 6772.757,
+    "pct_of_base": 3.3863784999999997
+  },
+  {
+    "method": "previous: K-Means (scratch)",
+    "params": "K=64, search=4",
+    "overlap@10": 0.9154000000000001,
+    "NN_in_top1": 0.942,
+    "NN_in_top10": 0.942,
+    "ms_per_query": 4.050405025482178,
+    "avg_vectors_searched": 13484.248,
+    "pct_of_base": 6.7421240000000004
+  },
+  {
+    "method": "previous: K-Means (scratch)",
+    "params": "K=64, search=8",
+    "overlap@10": 0.9839000000000001,
+    "NN_in_top1": 0.995,
+    "NN_in_top10": 0.995,
+    "ms_per_query": 8.047839879989624,
+    "avg_vectors_searched": 26788.047,
+    "pct_of_base": 13.3940235
+  },
+  {
+    "method": "previous: Fuzzy C-Means (scratch)",
+    "params": "K=64, m=2.0, search=1",
+    "overlap@10": 0.9074,
+    "NN_in_top1": 0.908,
+    "NN_in_top10": 0.908,
+    "ms_per_query": 23.746482610702515,
+    "avg_vectors_searched": 76858.967,
+    "pct_of_base": 38.4294835
+  },
+  {
+    "method": "previous: Fuzzy C-Means (scratch)",
+    "params": "K=64, m=2.0, search=2",
+    "overlap@10": 0.9182,
+    "NN_in_top1": 0.918,
+    "NN_in_top10": 0.918,
+    "ms_per_query": 22.967143297195435,
+    "avg_vectors_searched": 77843.115,
+    "pct_of_base": 38.921557500000006
+  },
+  {
+    "method": "previous: Fuzzy C-Means (scratch)",
+    "params": "K=64, m=2.0, search=4",
+    "overlap@10": 0.9214,
+    "NN_in_top1": 0.921,
+    "NN_in_top10": 0.921,
+    "ms_per_query": 22.851213693618774,
+    "avg_vectors_searched": 78241.559,
+    "pct_of_base": 39.1207795
+  },
+  {
+    "method": "previous: Fuzzy C-Means (scratch)",
+    "params": "K=64, m=2.0, search=8",
+    "overlap@10": 0.9227000000000001,
+    "NN_in_top1": 0.922,
+    "NN_in_top10": 0.922,
+    "ms_per_query": 26.04858660697937,
+    "avg_vectors_searched": 78371.79,
+    "pct_of_base": 39.185894999999995
+  },
+  {
+    "method": "ours: SA-AQEE-FCM (V5)",
+    "params": "K=64, m*=1.02, search=1",
+    "overlap@10": 0.6335,
+    "NN_in_top1": 0.663,
+    "NN_in_top10": 0.663,
+    "ms_per_query": 3.037778854370117,
+    "avg_vectors_searched": 7711.518,
+    "pct_of_base": 3.8557590000000004
+  },
+  {
+    "method": "ours: SA-AQEE-FCM (V5)",
+    "params": "K=64, m*=1.02, search=2",
+    "overlap@10": 0.8172999999999999,
+    "NN_in_top1": 0.836,
+    "NN_in_top10": 0.836,
+    "ms_per_query": 5.458600997924805,
+    "avg_vectors_searched": 15241.904,
+    "pct_of_base": 7.620952000000001
+  },
+  {
+    "method": "ours: SA-AQEE-FCM (V5)",
+    "params": "K=64, m*=1.02, search=4",
+    "overlap@10": 0.9266,
+    "NN_in_top1": 0.943,
+    "NN_in_top10": 0.943,
+    "ms_per_query": 11.632619142532349,
+    "avg_vectors_searched": 30215.838,
+    "pct_of_base": 15.107918999999999
+  },
+  {
+    "method": "ours: SA-AQEE-FCM (V5)",
+    "params": "K=64, m*=1.02, search=8",
+    "overlap@10": 0.9791,
+    "NN_in_top1": 0.988,
+    "NN_in_top10": 0.988,
+    "ms_per_query": 18.64386534690857,
+    "avg_vectors_searched": 52359.637,
+    "pct_of_base": 26.1798185
+  }
+]
