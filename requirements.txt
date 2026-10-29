@@ -1,0 +1,8 @@
+numpy
+scipy
+tqdm
+faiss-cpu
+beir
+sentence-transformers
+torch
+nltk
