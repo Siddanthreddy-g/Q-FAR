@@ -122,16 +122,19 @@ def nn_in_top(ids, exact_ids, r):
 
 
 # ------------------------------------------------------------------- our search
-def search_ours(base, queries, labels, route_order, n_search, n_clusters, k=100):
+def search_ours(base, queries, labels, route_order, n_search, n_clusters, k=100, members=None):
     """Search the n_search best clusters of every query. Returns the ids, ms per query and
-    the average number of vectors searched per query."""
-    members = [np.where(labels == c)[0] for c in range(n_clusters)]
+    the average number of vectors searched per query. members (one array of base positions per cluster) may list a
+    vector in several clusters: every copy counts as searched, and copies are merged before the top-k."""
+    if members is None:
+        members = [np.where(labels == c)[0] for c in range(n_clusters)]
     out = np.full((len(queries), k), -1, dtype=np.int64)
     t_all, scanned = 0.0, 0
     for i in range(len(queries)):
         t0 = time.time()
         cand = np.concatenate([members[c] for c in route_order[i, :n_search]])
         scanned += len(cand)
+        cand = np.unique(cand)
         diff = base[cand] - queries[i]
         d2 = np.einsum("ij,ij->i", diff, diff)
         kk = min(k, len(cand))
@@ -171,6 +174,10 @@ def main():
     ap.add_argument("--m_min", type=float, default=1.02, help="floor of the fuzzifier for SA-AQEE-FCM")
     ap.add_argument("--fit_sample", type=int, default=30000, help="documents used to fit SA-AQEE-FCM")
     ap.add_argument("--skip_hnsw", action="store_true", help="skip the slow HNSW index build")
+    ap.add_argument("--sa_aqee_soft", action="store_true",
+                    help="also run SA-AQEE-FCM-S (soft assignment) and K-Means with the identical spill")
+    ap.add_argument("--soft_rhos", type=float, nargs="+", default=[0.0, 0.25, 0.5, 1.0], help="spill budgets")
+    ap.add_argument("--soft_rules", nargs="+", default=["membership", "soar"], choices=["membership", "soar"])
     args = ap.parse_args()
 
     base, queries, gt = get_sift(args.data_dir, [args.url] if args.url else None)
@@ -231,6 +238,27 @@ def main():
             rows.append(make_row("ours: SA-AQEE-FCM (V5)", f"K={args.k}, m*={res['m']:.2f}, search={ns}",
                                  ids, exact_ids, ms, scanned, n_base))
 
+    if args.sa_aqee_soft:
+        from sa_aqee_soft import fit_sa_aqee_soft, make_probe, spill_entries
+        b64 = base.astype(np.float64)
+        probe = make_probe(b64, np.random.default_rng(42), "l2")
+        print("\nFitting SA-AQEE-FCM-S (soft assignment, L2 geometry)...", flush=True)
+        fit = fit_sa_aqee_soft(b64, args.k, np.random.default_rng(42), probe, "l2", verbose=True)
+        configs = [(r, ru) for r in args.soft_rhos for ru in (args.soft_rules if r > 0 else ["none"])]
+        for label, V in (("ours: SA-AQEE-FCM-S", fit["V"]), ("K-Means + same spill", km.cluster_centers_.astype(np.float64))):
+            order = l2_order(queries, V)
+            for rho, rule in configs:
+                ed, ec, _, info = spill_entries(b64, V, "l2", rho, rule if rho > 0 else "membership",
+                                                rng=np.random.default_rng(42))
+                srt = np.argsort(ec, kind="stable")
+                bounds = np.searchsorted(ec[srt], np.arange(args.k + 1))
+                members = [ed[srt[bounds[c]:bounds[c + 1]]] for c in range(args.k)]
+                for ns in args.n_search:
+                    ids, ms, scanned = search_ours(base, queries, None, order, ns, args.k, members=members)
+                    rows.append(make_row(label, f"K={args.k}, rho={rho:g} {rule}, x{info['index_x']:.2f}, search={ns}",
+                                         ids, exact_ids, ms, scanned, n_base))
+                print(f"  {label}: rho {rho:g} {rule} done (index x{info['index_x']:.2f})", flush=True)
+
     if args.with_faiss:
         import faiss
         max_threads = os.cpu_count() or 4
@@ -282,13 +310,13 @@ def main():
                 hn.hnsw.efSearch = ef
                 run(hn, "HNSW (Malkov and Yashunin)", f"M=32, efSearch={ef}")
 
-    print(f"\n{'method':32s} {'params':28s} {'ovl@10':>7s} {'NN@1':>6s} {'NN@10':>6s} {'vectors searched':>17s} {'ms/q':>7s}")
+    print(f"\n{'method':32s} {'params':44s} {'ovl@10':>7s} {'NN@1':>6s} {'NN@10':>6s} {'vectors searched':>17s} {'ms/q':>7s}")
     for r in rows:
         vs = f"{r['avg_vectors_searched']:,.0f} ({r['pct_of_base']:.1f}%)" if r["avg_vectors_searched"] is not None else "n/a"
-        print(f"{r['method']:32s} {r['params']:28s} {r['overlap@10']:7.3f} {r['NN_in_top1']:6.3f} "
+        print(f"{r['method']:32s} {r['params']:44s} {r['overlap@10']:7.3f} {r['NN_in_top1']:6.3f} "
               f"{r['NN_in_top10']:6.3f} {vs:>17s} {r['ms_per_query']:7.2f}")
     os.makedirs("cache_cross", exist_ok=True)
-    out = f"cache_cross/our_model_sift_{n_base}_m{args.m}.json"
+    out = f"cache_cross/our_model_sift_{n_base}_m{args.m}" + ("_soft" if args.sa_aqee_soft else "") + ".json"
     with open(out, "w") as f:
         json.dump(rows, f, indent=2)
     print("\nSaved", out)
