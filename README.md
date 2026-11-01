@@ -34,9 +34,16 @@ can gain from it:
   Sun et al. (NeurIPS 2023) ("soar").
 
 Copies count toward "documents searched", and the index size (x1.5 for rho = 0.5) is reported with every result.
-The method's default, fixed in advance, is rho = 0.5 with the membership rule; the script also reports a sweep of rho
-and both rules, K-Means with the identical spill, and the method without the evolution, so the source of any gain is
-visible.
+The script also reports a sweep of rho and both rules, K-Means with the identical spill, and the method without the
+evolution, so the source of any gain is visible.
+
+**Default setting: rho = 0.5, SOAR rule, lambda = 0.5.** It was chosen on development queries only, with
+`dev_select_soft.py`: SciFact's train queries (809, used by no reported result) embedded with all-MiniLM-L6-v2, compared
+with K-Means at 17 and 64 clusters over seeds 42 to 44. Stage 1 compared the spill budget and the rule (SOAR was ahead
+at every budget); stage 2 compared lambda in {0.25, 0.5, 1, 2, 4} (0.5 was best, 2 and 4 were clearly worse). Routing
+each query by several prototypes per cluster was also tried on the development queries and did not help, so it is not
+part of the method. The first default (rho = 0.5, membership rule) was fixed before any run; the Results below still
+use it.
 
 ## Datasets
 BEIR NQ (a 200,000-document subset, 3,452 queries), SciFact, NFCorpus, and SIFT1M (first 200,000 vectors). Datasets and
@@ -44,7 +51,8 @@ embedding caches are not in this repository.
 
 ## Results
 ### SA-AQEE-FCM-S against K-Means
-At the same number of documents searched, with the setting fixed before the runs (half of the documents get a second
+These runs use the first default (membership rule); the current default (SOAR rule, lambda = 0.5) has not been run on
+these datasets with bge-small yet. At the same number of documents searched, with the setting fixed before the runs (half of the documents get a second
 copy, so the index holds 1.5x the documents). Mean of seeds 42, 43 and 44; K-Means runs 50 iterations and is scored
 with the better of its two routings. Points where K-Means has no result at a similar cost are left out.
 
@@ -102,8 +110,10 @@ python sa_aqee_soft.py --dataset scifact --seeds 42 43 44
 python sa_aqee_soft.py --dataset nfcorpus --k 64 --seeds 42 43 44
 python sa_aqee_soft.py --dataset nq --subsample 200000 --emb_dir cache --k 64 --seeds 42 43 44 --v5_fit_sample 30000 --m_min 1.02
 python our_model_on_sift1m.py --sa_aqee_soft
+python dev_select_soft.py
 ```
-`sa_aqee_soft.py --synthetic` runs the whole pipeline on synthetic data as a quick check (those numbers are not
+`dev_select_soft.py` repeats the choice of the default setting on SciFact's train queries (it embeds them with
+all-MiniLM-L6-v2 through sentence-transformers). `sa_aqee_soft.py --synthetic` runs the whole pipeline on synthetic data as a quick check (those numbers are not
 results). `--data_path` loads a BEIR-format folder that is already on disk instead of downloading it.
 The scripts expect the BEIR datasets and cached embeddings in the folders they create on first use.
 

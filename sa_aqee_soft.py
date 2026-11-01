@@ -15,6 +15,9 @@ What changes against SA-AQEE-FCM V5 (sa_aqee_fcm.py), and why:
      the cluster chosen by the SOAR loss of Sun et al. (NeurIPS 2023), "soar". At most two copies per document.
 
 Cost is counted fairly: a copy scanned twice counts twice in "documents searched", and the index size is reported.
+
+Default setting (rho = 0.5, SOAR rule, lambda = 0.5) was chosen on development queries only, with dev_select_soft.py:
+the SciFact train queries, which no reported result uses, embedded with all-MiniLM-L6-v2.
 """
 import argparse
 import contextlib
@@ -370,9 +373,9 @@ def main():
     ap.add_argument("--rhos", type=float, nargs="+", default=[0.25, 0.5, 1.0], help="spill budgets (share of docs)")
     ap.add_argument("--rules", nargs="+", default=["membership", "soar"], choices=["membership", "soar"])
     ap.add_argument("--default_rho", type=float, default=0.5, help="the method's spill budget, fixed in advance")
-    ap.add_argument("--default_rule", default="membership", choices=["membership", "soar"])
+    ap.add_argument("--default_rule", default="soar", choices=["membership", "soar"])
     ap.add_argument("--tau", type=float, default=0.5)
-    ap.add_argument("--soar_lambda", type=float, default=1.0)
+    ap.add_argument("--soar_lambda", type=float, default=0.5, help="SOAR weight (0.5 chosen on development queries)")
     ap.add_argument("--m_fit", type=float, default=1.05)
     ap.add_argument("--fit_sample", type=int, default=20000, help="sample for the evolution and the proxy")
     ap.add_argument("--pop", type=int, default=12)

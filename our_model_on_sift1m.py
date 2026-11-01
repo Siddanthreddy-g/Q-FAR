@@ -178,6 +178,7 @@ def main():
                     help="also run SA-AQEE-FCM-S (soft assignment) and K-Means with the identical spill")
     ap.add_argument("--soft_rhos", type=float, nargs="+", default=[0.0, 0.25, 0.5, 1.0], help="spill budgets")
     ap.add_argument("--soft_rules", nargs="+", default=["membership", "soar"], choices=["membership", "soar"])
+    ap.add_argument("--soft_lambda", type=float, default=0.5, help="SOAR weight (the SA-AQEE-FCM-S default)")
     args = ap.parse_args()
 
     base, queries, gt = get_sift(args.data_dir, [args.url] if args.url else None)
@@ -249,7 +250,7 @@ def main():
             order = l2_order(queries, V)
             for rho, rule in configs:
                 ed, ec, _, info = spill_entries(b64, V, "l2", rho, rule if rho > 0 else "membership",
-                                                rng=np.random.default_rng(42))
+                                                lam=args.soft_lambda, rng=np.random.default_rng(42))
                 srt = np.argsort(ec, kind="stable")
                 bounds = np.searchsorted(ec[srt], np.arange(args.k + 1))
                 members = [ed[srt[bounds[c]:bounds[c + 1]]] for c in range(args.k)]
