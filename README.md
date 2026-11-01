@@ -45,7 +45,9 @@ each query by several prototypes per cluster was also tried on the development q
 part of the method. The selection was repeated with
 sentence-transformers on a second machine and gave the same choice and the same numbers; the record is
 `cache_cross/dev_select_soft_scifact_train.json`. The first default (rho = 0.5, membership rule) was fixed before any run; its results are in the git
-history (commit 7b856cb), and the Results below use the current default.
+history (commit 7b856cb). NFCorpus has its own development split: ranked on all four metrics (`--criterion all`),
+its dev queries chose rho = 0.25, SOAR, lambda = 2 (`cache_cross/dev_select_soft_nfcorpus_dev_all.json`), which the
+NFCorpus results use. NQ has no development split in BEIR and uses the SciFact setting.
 
 ## Datasets
 BEIR NQ (a 200,000-document subset, 3,452 queries), SciFact, NFCorpus, and SIFT1M (first 200,000 vectors). Datasets and
@@ -53,47 +55,50 @@ embedding caches are not in this repository.
 
 ## Results
 ### SA-AQEE-FCM-S against K-Means
-Default setting (rho = 0.5, SOAR rule, lambda = 0.5; the index holds 1.5x the documents), compared with K-Means at the
-same number of documents searched. Mean of seeds 42, 43 and 44; K-Means runs 50 iterations and is scored with the
+Each dataset uses the setting chosen on its own development queries with `dev_select_soft.py`: SciFact (its train
+queries) rho = 0.5, SOAR, lambda = 0.5; NFCorpus (its dev queries, ranked on all four metrics) rho = 0.25, SOAR,
+lambda = 2; NQ has no development split in BEIR and uses the SciFact setting, as does SIFT1M. Compared with K-Means at
+the same number of documents searched; mean of seeds 42, 43 and 44; K-Means runs 50 iterations and is scored with the
 better of its two routings. Points where K-Means has no result at a similar cost are left out.
 
-| Dataset | clusters searched | docs searched | NDCG@10 ours | NDCG@10 K-Means | difference | Recall@100 difference |
-|---|---|---|---|---|---|---|
-| SciFact | 1 | 472 | 0.5524 | 0.5381 | +0.0143 | +0.0192 |
-| SciFact | 2 | 943 | 0.6710 | 0.6566 | +0.0144 | +0.0257 |
-| SciFact | 3 | 1,420 | 0.7000 | 0.6864 | +0.0136 | +0.0197 |
-| SciFact | 4 | 1,892 | 0.7065 | 0.7007 | +0.0058 | +0.0120 |
-| NQ (200k) | 1 | 4,899 | 0.5729 | 0.5553 | +0.0176 | +0.0190 |
-| NQ (200k) | 2 | 9,806 | 0.6690 | 0.6676 | +0.0014 | -0.0003 |
-| NQ (200k) | 3 | 14,637 | 0.7036 | 0.6965 | +0.0071 | +0.0081 |
-| NQ (200k) | 4 | 19,397 | 0.7194 | 0.7128 | +0.0066 | +0.0072 |
-| NFCorpus | 1 | 99 | 0.2211 | 0.2155 | +0.0057 | +0.0154 |
-| NFCorpus | 2 | 205 | 0.2526 | 0.2528 | -0.0001 | +0.0049 |
-| NFCorpus | 3 | 311 | 0.2743 | 0.2734 | +0.0009 | +0.0125 |
-| NFCorpus | 4 | 416 | 0.2894 | 0.2911 | -0.0017 | +0.0079 |
+| Dataset | clusters searched | docs searched | NDCG@10 ours | NDCG@10 K-Means | difference | Recall@100 difference | index |
+|---|---|---|---|---|---|---|---|
+| SciFact | 1 | 472 | 0.5524 | 0.5381 | +0.0143 | +0.0192 | 1.50x |
+| SciFact | 2 | 943 | 0.6710 | 0.6566 | +0.0144 | +0.0257 | 1.50x |
+| SciFact | 3 | 1,420 | 0.7000 | 0.6864 | +0.0136 | +0.0197 | 1.50x |
+| SciFact | 4 | 1,892 | 0.7065 | 0.7007 | +0.0058 | +0.0120 | 1.50x |
+| NQ (200k) | 1 | 4,899 | 0.5729 | 0.5553 | +0.0176 | +0.0190 | 1.50x |
+| NQ (200k) | 2 | 9,806 | 0.6690 | 0.6676 | +0.0014 | -0.0003 | 1.50x |
+| NQ (200k) | 3 | 14,637 | 0.7036 | 0.6965 | +0.0071 | +0.0081 | 1.50x |
+| NQ (200k) | 4 | 19,397 | 0.7194 | 0.7128 | +0.0066 | +0.0072 | 1.50x |
+| NFCorpus | 1 | 80 | 0.2117 | 0.2051 | +0.0066 | +0.0153 | 1.25x |
+| NFCorpus | 2 | 162 | 0.2426 | 0.2428 | -0.0002 | +0.0054 | 1.25x |
+| NFCorpus | 3 | 245 | 0.2629 | 0.2604 | +0.0024 | +0.0129 | 1.25x |
+| NFCorpus | 4 | 328 | 0.2800 | 0.2755 | +0.0045 | +0.0108 | 1.25x |
 
 SIFT1M (first 200,000 vectors, seed 42 only), overlap of the top 10 with the exact top 10 at the same number of vectors
-searched: 0.693 vs 0.667 (about 5,000 vectors), 0.867 vs 0.841 (about 10,000) and 0.966 vs 0.949 (about 20,000).
+searched: 0.693 vs 0.667 (about 5,000 vectors), 0.867 vs 0.841 (about 10,000) and 0.966 vs 0.949 (about 20,000). The
+share of queries whose exact nearest neighbour comes first is also higher: 0.745 vs 0.721, 0.899 vs 0.881 and 0.978 vs
+0.968.
 
-* SA-AQEE-FCM-S is above K-Means at every compared point on SciFact (+0.006 to +0.014), NQ (+0.001 to +0.018) and
-  SIFT1M (+0.016 to +0.026). On NFCorpus it is above K-Means at 1 and 3 clusters and below it by at most 0.002 at 2 and
-  4 clusters, which is inside the seed-to-seed spread (standard deviation 0.003 to 0.007); its Recall@100 is higher at
-  every NFCorpus point.
 * Across all four metrics (NDCG, MAP, Recall and Precision at cutoffs 1, 3, 5, 10 and 100, 1 to 4 clusters
-  searched), SA-AQEE-FCM-S is ahead of K-Means in 80 of 80 comparisons on SciFact and 76 of 80 on NQ (the 4 misses
-  are all at 2 clusters and under 0.0005), and in 51 of 80 on NFCorpus, where it leads every @100 metric and trails
-  by up to 0.0065 at cutoffs 1 to 10. On SIFT1M the share of queries whose exact nearest neighbour comes first is
-  also higher: 0.745 vs 0.721, 0.899 vs 0.881 and 0.978 vs 0.968.
-* What the parts contribute (ablations from the same runs, at the default setting):
+  searched), SA-AQEE-FCM-S is ahead of K-Means in 80 of 80 comparisons on SciFact, 76 of 80 on NQ (the 4 misses are
+  all at 2 clusters and under 0.0005) and 66 of 80 on NFCorpus. On NFCorpus every MAP value and every value at
+  cutoffs 1 and 100 is ahead; the misses are at cutoffs 3 to 10, mostly at 2 clusters, the largest -0.0056 (P@5),
+  inside the seed-to-seed spread there (NDCG@10 standard deviation up to 0.009).
+* On NDCG@10 alone it is ahead at every compared point on SciFact (+0.006 to +0.014) and NQ (+0.001 to +0.018), and
+  on NFCorpus at 1, 3 and 4 clusters (+0.002 to +0.007) with a tie at 2 (-0.0002).
+* What the parts contribute (ablations from the same runs, at each dataset's setting):
   * Soft assignment: K-Means' own clusters with the same soft assignment also gain over plain K-Means. On NQ they are
-    ahead of SA-AQEE-FCM-S by 0.003 to 0.004 at 2 to 4 clusters; on SciFact SA-AQEE-FCM-S is ahead of them by 0.008
-    to 0.022 at 2 to 4 clusters; on NFCorpus neither is consistently ahead; on SIFT1M SA-AQEE-FCM-S has the higher
-    overlap and they have the higher NN@1.
-  * Evolution: with it, NDCG@10 is higher by 0.001 to 0.007 on SciFact and NQ and within 0.002 either way on NFCorpus.
+    ahead of SA-AQEE-FCM-S by 0.003 to 0.004 at 2 to 4 clusters; SA-AQEE-FCM-S is ahead of them on SciFact by 0.008
+    to 0.022 at 2 to 4 clusters, and on NFCorpus by 0.002 to 0.005 at 3 and 4 clusters (0.001 behind at 2).
+  * Evolution: with it, NDCG@10 is higher by 0.001 to 0.007 on SciFact and NQ; on NFCorpus it is 0.002 to 0.004
+    lower at 2 and 3 clusters and slightly higher beyond.
   * Spherical FCM without soft assignment is a little below K-Means on NQ and NFCorpus.
-* The first default (membership rule, fixed before any run) was below K-Means on NFCorpus by up to 0.006 and at one
-  NQ point; those runs are in the git history (commit 7b856cb).
-* Giving every document a second copy (2x index) did not do better than the default on NQ or NFCorpus.
+* Earlier runs are kept: the SciFact setting on NFCorpus (51 of 80 four-metric comparisons ahead) is
+  `cache_cross/sa_aqee_soft_nfcorpus_scifact_setting.json`, and the first default (membership rule, fixed before any
+  run) is in the git history (commit 7b856cb).
+* Giving every document a second copy (2x index) did worse than these settings on NQ and NFCorpus.
 * HNSW was not re-run for SA-AQEE-FCM-S.
 
 ### Earlier results
@@ -113,7 +118,8 @@ python sa_aqee_routing.py --dataset scifact --seeds 42 43 44
 python sa_aqee_learned_routing.py --dataset scifact --seeds 42 43 44 --oracle
 python our_model_on_sift1m.py --sa_aqee
 python sa_aqee_soft.py --dataset scifact --seeds 42 43 44
-python sa_aqee_soft.py --dataset nfcorpus --k 64 --seeds 42 43 44
+python dev_select_soft.py --dataset nfcorpus --split dev --ks 64 --criterion all
+python sa_aqee_soft.py --dataset nfcorpus --k 64 --seeds 42 43 44 --default_rho 0.25 --default_rule soar --soar_lambda 2
 python sa_aqee_soft.py --dataset nq --subsample 200000 --emb_dir cache --k 64 --seeds 42 43 44 --v5_fit_sample 30000 --m_min 1.02
 python our_model_on_sift1m.py --sa_aqee_soft
 python dev_select_soft.py
