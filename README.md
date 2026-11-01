@@ -79,6 +79,11 @@ searched: 0.693 vs 0.667 (about 5,000 vectors), 0.867 vs 0.841 (about 10,000) an
   SIFT1M (+0.016 to +0.026). On NFCorpus it is above K-Means at 1 and 3 clusters and below it by at most 0.002 at 2 and
   4 clusters, which is inside the seed-to-seed spread (standard deviation 0.003 to 0.007); its Recall@100 is higher at
   every NFCorpus point.
+* Across all four metrics (NDCG, MAP, Recall and Precision at cutoffs 1, 3, 5, 10 and 100, 1 to 4 clusters
+  searched), SA-AQEE-FCM-S is ahead of K-Means in 80 of 80 comparisons on SciFact and 76 of 80 on NQ (the 4 misses
+  are all at 2 clusters and under 0.0005), and in 51 of 80 on NFCorpus, where it leads every @100 metric and trails
+  by up to 0.0065 at cutoffs 1 to 10. On SIFT1M the share of queries whose exact nearest neighbour comes first is
+  also higher: 0.745 vs 0.721, 0.899 vs 0.881 and 0.978 vs 0.968.
 * What the parts contribute (ablations from the same runs, at the default setting):
   * Soft assignment: K-Means' own clusters with the same soft assignment also gain over plain K-Means. On NQ they are
     ahead of SA-AQEE-FCM-S by 0.003 to 0.004 at 2 to 4 clusters; on SciFact SA-AQEE-FCM-S is ahead of them by 0.008
