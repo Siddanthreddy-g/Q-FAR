@@ -3,13 +3,15 @@
 The queries are SciFact's train split, which no reported result uses, and the vectors come from all-MiniLM-L6-v2, a
 different model from the bge-small vectors behind the reported results. Every setting is compared with plain K-Means at
 the same number of documents searched (1 to 4 clusters searched; 17 and 64 clusters; seeds 42, 43, 44), and ranked by
-the mean NDCG@10 difference over both cluster counts.
+the mean NDCG@10 difference over the cluster counts (--criterion ndcg10, the default), or by the mean difference over
+all four metrics, NDCG, MAP, Recall and Precision at cutoffs 1, 3, 5, 10 and 100 (--criterion all). Both are printed.
   stage 1: spill budget rho in {0.25, 0.5, 0.75} x rule in {membership, soar (lambda 1)}; a tie within 0.001 goes to the
            smaller rho (smaller index)
   stage 2: SOAR lambda in {0.25, 0.5, 1, 2, 4} at the stage-1 rho, if stage 1 picked the SOAR rule
 
 python dev_select_soft.py                                   # downloads SciFact, embeds it with sentence-transformers
 python dev_select_soft.py --data_path D --split test --emb_dir E   # a BEIR folder on disk and precomputed vectors
+python dev_select_soft.py --dataset nfcorpus --split dev --ks 64 --criterion all   # NFCorpus's own dev queries
 """
 import argparse
 import contextlib
@@ -23,6 +25,8 @@ from sa_aqee_soft import (build_spilled_index, fit_sa_aqee_soft, make_probe, par
                           spill_entries, unit)
 
 NS = [1, 2, 3, 4, 6, 8]
+CUTS = [1, 3, 5, 10, 100]
+KEYS = [f"{p}@{k}" for p in ("NDCG", "MAP", "Recall", "P") for k in CUTS]
 
 
 def main():
@@ -34,6 +38,8 @@ def main():
     ap.add_argument("--model", default="sentence-transformers/all-MiniLM-L6-v2")
     ap.add_argument("--ks", type=int, nargs="+", default=[17, 64])
     ap.add_argument("--seeds", type=int, nargs="+", default=[42, 43, 44])
+    ap.add_argument("--criterion", choices=["ndcg10", "all"], default="ndcg10",
+                    help="rank settings by NDCG@10, or by the mean over all four metrics at all cutoffs")
     args = ap.parse_args()
 
     from beir.datasets.data_loader import GenericDataLoader
@@ -73,8 +79,9 @@ def main():
         for n in NS:
             res, scanned = search_spilled(built, q32, np.argsort(-scores, 1)[:, :n], doc_ids, query_ids)
             with contextlib.redirect_stdout(io.StringIO()):
-                ndcg = EvaluateRetrieval().evaluate(qrels, res, [10])[0]["NDCG@10"]
-            out.append((n, scanned, ndcg))
+                ndcg, _map, recall, prec = EvaluateRetrieval().evaluate(qrels, res, CUTS)
+            m = {**ndcg, **_map, **recall, **prec}
+            out.append((n, scanned, [m[k] for k in KEYS]))
         return out
 
     fits = {}                                                        # (C, seed) -> (K-Means curve, our centroids)
@@ -90,44 +97,55 @@ def main():
             print(f"  C={C} seed {seed}: K-Means and SA-AQEE-FCM-S fitted", flush=True)
 
     def score(rho, rule, lam):
-        """Mean NDCG@10 difference against the plain K-Means curve, over both cluster counts (n = 1..4)."""
-        per_c = []
+        """Differences against the plain K-Means curve at the same documents searched (n = 1..4), per cluster count:
+        NDCG@10 alone, and the mean over all four metrics at all cutoffs (each metric against its own K-Means curve)."""
+        per_c_ndcg, per_c_all, wins, total = [], [], 0, 0
         for C in args.ks:
             ours, ref = {}, {}
             for seed in args.seeds:
                 kmc, V = fits[(C, seed)]
                 ed, ec, _, _ = spill_entries(Xu, V, "cos", rho, rule, lam=lam, rng=np.random.default_rng(seed))
-                for n, docs, nd in curve(route_scores(Qu, V, "cos"), build_spilled_index(d32, ed, ec, C)):
-                    ours.setdefault(n, []).append((docs, nd))
-                for n, docs, nd in kmc:
-                    ref.setdefault(n, []).append((docs, nd))
-            env = pareto([tuple(np.mean(v, 0)) for v in ref.values()])
-            ex, en = [p[0] for p in env], [p[1] for p in env]
-            diffs = [nd - np.interp(dc, ex, en) for n, v in ours.items() if n <= 4
-                     for dc, nd in [tuple(np.mean(v, 0))] if ex[0] <= dc <= ex[-1]]
-            per_c.append(float(np.mean(diffs)))
-        return float(np.mean(per_c)), per_c
+                for n, docs, vals in curve(route_scores(Qu, V, "cos"), build_spilled_index(d32, ed, ec, C)):
+                    ours.setdefault(n, []).append([docs] + vals)
+                for n, docs, vals in kmc:
+                    ref.setdefault(n, []).append([docs] + vals)
+            ours = {n: np.mean(v, 0) for n, v in ours.items()}
+            ref = [np.mean(v, 0) for v in ref.values()]
+            diffs = {}
+            for j, key in enumerate(KEYS, start=1):
+                env = pareto([(r[0], r[j]) for r in ref])
+                ex, ev = [e[0] for e in env], [e[1] for e in env]
+                diffs[key] = [o[j] - np.interp(o[0], ex, ev) for n, o in ours.items() if n <= 4 and ex[0] <= o[0] <= ex[-1]]
+            per_c_ndcg.append(float(np.mean(diffs["NDCG@10"])))
+            per_c_all.append(float(np.mean([np.mean(v) for v in diffs.values()])))
+            wins += sum(x > 0 for v in diffs.values() for x in v)
+            total += sum(len(v) for v in diffs.values())
+        return dict(ndcg10=float(np.mean(per_c_ndcg)), all=float(np.mean(per_c_all)), wins_all=f"{wins}/{total}",
+                    per_c_ndcg10=per_c_ndcg, per_c_all=per_c_all)
 
-    print("\nstage 1: spill budget x rule")
+    crit = args.criterion
+    show = lambda r: (f"NDCG@10 {r['ndcg10']:+.4f}  all metrics {r['all']:+.4f}  "        # noqa: E731
+                      f"(ahead in {r['wins_all']} metric points)")
+    print(f"\nstage 1: spill budget x rule (ranked by {'NDCG@10' if crit == 'ndcg10' else 'all four metrics'})")
     stage1 = []
     for rho in (0.25, 0.5, 0.75):
         for rule in ("membership", "soar"):
-            m, per_c = score(rho, rule, 1.0)
-            stage1.append(dict(rho=rho, rule=rule, lam=1.0, mean=m, per_c=per_c))
-            print(f"  rho {rho:.2f} {rule:10s}  mean NDCG@10 difference {m:+.4f}  per cluster count {np.round(per_c, 4)}")
+            r = score(rho, rule, 1.0)
+            stage1.append(dict(rho=rho, rule=rule, lam=1.0, mean=r[crit], **r))
+            print(f"  rho {rho:.2f} {rule:10s}  {show(r)}")
     top = max(s["mean"] for s in stage1)
     best = min([s for s in stage1 if s["mean"] >= top - 0.001], key=lambda s: (s["rho"], -s["mean"]))
     stage2 = []
     if best["rule"] == "soar":
         print(f"\nstage 2: SOAR lambda at rho {best['rho']:.2f}")
         for lam in (0.25, 0.5, 1.0, 2.0, 4.0):
-            m, per_c = score(best["rho"], "soar", lam)
-            stage2.append(dict(rho=best["rho"], rule="soar", lam=lam, mean=m, per_c=per_c))
-            print(f"  lambda {lam:<4g}  mean NDCG@10 difference {m:+.4f}  per cluster count {np.round(per_c, 4)}")
+            r = score(best["rho"], "soar", lam)
+            stage2.append(dict(rho=best["rho"], rule="soar", lam=lam, mean=r[crit], **r))
+            print(f"  lambda {lam:<4g}  {show(r)}")
         best = max(stage2, key=lambda s: s["mean"])
     print(f"\nchosen: rho {best['rho']:.2f}, rule {best['rule']}" + (f", lambda {best['lam']:g}" if best["rule"] == "soar" else ""))
     os.makedirs("cache_cross", exist_ok=True)
-    out = f"cache_cross/dev_select_soft_{args.dataset}_{args.split}.json"
+    out = f"cache_cross/dev_select_soft_{args.dataset}_{args.split}" + ("" if crit == "ndcg10" else f"_{crit}") + ".json"
     with open(out, "w") as f:
         json.dump(dict(args=vars(args), stage1=stage1, stage2=stage2, chosen=best), f, indent=1)
     print("Saved", out)
