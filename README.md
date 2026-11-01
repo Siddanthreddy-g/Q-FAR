@@ -42,7 +42,9 @@ evolution, so the source of any gain is visible.
 with K-Means at 17 and 64 clusters over seeds 42 to 44. Stage 1 compared the spill budget and the rule (SOAR was ahead
 at every budget); stage 2 compared lambda in {0.25, 0.5, 1, 2, 4} (0.5 was best, 2 and 4 were clearly worse). Routing
 each query by several prototypes per cluster was also tried on the development queries and did not help, so it is not
-part of the method. The first default (rho = 0.5, membership rule) was fixed before any run; its results are in the git
+part of the method. The selection was repeated with
+sentence-transformers on a second machine and gave the same choice and the same numbers; the record is
+`cache_cross/dev_select_soft_scifact_train.json`. The first default (rho = 0.5, membership rule) was fixed before any run; its results are in the git
 history (commit 7b856cb), and the Results below use the current default.
 
 ## Datasets
