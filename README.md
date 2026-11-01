@@ -42,8 +42,8 @@ evolution, so the source of any gain is visible.
 with K-Means at 17 and 64 clusters over seeds 42 to 44. Stage 1 compared the spill budget and the rule (SOAR was ahead
 at every budget); stage 2 compared lambda in {0.25, 0.5, 1, 2, 4} (0.5 was best, 2 and 4 were clearly worse). Routing
 each query by several prototypes per cluster was also tried on the development queries and did not help, so it is not
-part of the method. The first default (rho = 0.5, membership rule) was fixed before any run; the Results below still
-use it.
+part of the method. The first default (rho = 0.5, membership rule) was fixed before any run; its results are in the git
+history (commit 7b856cb), and the Results below use the current default.
 
 ## Datasets
 BEIR NQ (a 200,000-document subset, 3,452 queries), SciFact, NFCorpus, and SIFT1M (first 200,000 vectors). Datasets and
@@ -51,43 +51,42 @@ embedding caches are not in this repository.
 
 ## Results
 ### SA-AQEE-FCM-S against K-Means
-These runs use the first default (membership rule); the current default (SOAR rule, lambda = 0.5) has not been run on
-these datasets with bge-small yet. At the same number of documents searched, with the setting fixed before the runs (half of the documents get a second
-copy, so the index holds 1.5x the documents). Mean of seeds 42, 43 and 44; K-Means runs 50 iterations and is scored
-with the better of its two routings. Points where K-Means has no result at a similar cost are left out.
+Default setting (rho = 0.5, SOAR rule, lambda = 0.5; the index holds 1.5x the documents), compared with K-Means at the
+same number of documents searched. Mean of seeds 42, 43 and 44; K-Means runs 50 iterations and is scored with the
+better of its two routings. Points where K-Means has no result at a similar cost are left out.
 
 | Dataset | clusters searched | docs searched | NDCG@10 ours | NDCG@10 K-Means | difference | Recall@100 difference |
 |---|---|---|---|---|---|---|
-| SciFact | 1 | 476 | 0.5579 | 0.5392 | +0.0187 | +0.0215 |
-| SciFact | 2 | 957 | 0.6725 | 0.6590 | +0.0136 | +0.0179 |
-| SciFact | 3 | 1,446 | 0.6976 | 0.6871 | +0.0105 | +0.0157 |
-| SciFact | 4 | 1,923 | 0.7060 | 0.7017 | +0.0044 | +0.0087 |
-| NQ (200k) | 1 | 4,969 | 0.5755 | 0.5578 | +0.0177 | +0.0196 |
-| NQ (200k) | 2 | 10,042 | 0.6671 | 0.6710 | -0.0039 | -0.0061 |
-| NQ (200k) | 3 | 15,033 | 0.6996 | 0.6979 | +0.0018 | +0.0020 |
-| NQ (200k) | 4 | 19,925 | 0.7155 | 0.7139 | +0.0016 | +0.0013 |
-| NFCorpus | 1 | 100 | 0.2170 | 0.2155 | +0.0014 | +0.0110 |
-| NFCorpus | 2 | 210 | 0.2484 | 0.2537 | -0.0052 | +0.0023 |
-| NFCorpus | 3 | 320 | 0.2705 | 0.2745 | -0.0039 | +0.0082 |
-| NFCorpus | 4 | 429 | 0.2864 | 0.2919 | -0.0055 | +0.0059 |
+| SciFact | 1 | 472 | 0.5524 | 0.5381 | +0.0143 | +0.0192 |
+| SciFact | 2 | 943 | 0.6710 | 0.6566 | +0.0144 | +0.0257 |
+| SciFact | 3 | 1,420 | 0.7000 | 0.6864 | +0.0136 | +0.0197 |
+| SciFact | 4 | 1,892 | 0.7065 | 0.7007 | +0.0058 | +0.0120 |
+| NQ (200k) | 1 | 4,899 | 0.5729 | 0.5553 | +0.0176 | +0.0190 |
+| NQ (200k) | 2 | 9,806 | 0.6690 | 0.6676 | +0.0014 | -0.0003 |
+| NQ (200k) | 3 | 14,637 | 0.7036 | 0.6965 | +0.0071 | +0.0081 |
+| NQ (200k) | 4 | 19,397 | 0.7194 | 0.7128 | +0.0066 | +0.0072 |
+| NFCorpus | 1 | 99 | 0.2211 | 0.2155 | +0.0057 | +0.0154 |
+| NFCorpus | 2 | 205 | 0.2526 | 0.2528 | -0.0001 | +0.0049 |
+| NFCorpus | 3 | 311 | 0.2743 | 0.2734 | +0.0009 | +0.0125 |
+| NFCorpus | 4 | 416 | 0.2894 | 0.2911 | -0.0017 | +0.0079 |
 
 SIFT1M (first 200,000 vectors, seed 42 only), overlap of the top 10 with the exact top 10 at the same number of vectors
-searched: 0.689 vs 0.669 (about 5,000 vectors), 0.862 vs 0.844 (about 10,000) and 0.964 vs 0.951 (about 20,000).
+searched: 0.693 vs 0.667 (about 5,000 vectors), 0.867 vs 0.841 (about 10,000) and 0.966 vs 0.949 (about 20,000).
 
-* SA-AQEE-FCM-S is above K-Means at every compared point on SciFact and SIFT1M, and on NQ when one cluster is searched
-  (+0.018). On NQ with 2 to 4 clusters the two are within 0.004 of each other. On NFCorpus it is below K-Means on
-  NDCG@10 at 2 to 4 clusters (by 0.004 to 0.006), although its Recall@100 is higher there. The seed-to-seed standard
-  deviation of NDCG@10 is 0.002 to 0.011.
-* What the parts contribute (ablations from the same runs):
-  * Soft assignment: on NQ, K-Means' own clusters with the same soft assignment do better than SA-AQEE-FCM-S (it is
-    below them at 29 of 32 points, by 0.005 on average). On SciFact the order is reversed: SA-AQEE-FCM-S is above them by
-    0.004 on average and by 0.009 to 0.020 at the default setting. On NFCorpus neither is consistently ahead.
-  * Evolution: with and without it, NDCG@10 differs by about 0.001 on average (slightly higher with it on NQ and
-    SciFact, slightly lower on NFCorpus).
-  * Spherical FCM without soft assignment is a little below K-Means on NQ and NFCorpus (by 0.003 to 0.004 on average).
-* Other settings in the sweep (not chosen in advance, so not the headline): placing the second copy with the SOAR rule
-  did better than the membership rule on NQ, NFCorpus and SIFT1M and about the same on SciFact; giving every document a
-  second copy (2x index) was worse than K-Means on NQ, NFCorpus and SIFT1M.
+* SA-AQEE-FCM-S is above K-Means at every compared point on SciFact (+0.006 to +0.014), NQ (+0.001 to +0.018) and
+  SIFT1M (+0.016 to +0.026). On NFCorpus it is above K-Means at 1 and 3 clusters and below it by at most 0.002 at 2 and
+  4 clusters, which is inside the seed-to-seed spread (standard deviation 0.003 to 0.007); its Recall@100 is higher at
+  every NFCorpus point.
+* What the parts contribute (ablations from the same runs, at the default setting):
+  * Soft assignment: K-Means' own clusters with the same soft assignment also gain over plain K-Means. On NQ they are
+    ahead of SA-AQEE-FCM-S by 0.003 to 0.004 at 2 to 4 clusters; on SciFact SA-AQEE-FCM-S is ahead of them by 0.008
+    to 0.022 at 2 to 4 clusters; on NFCorpus neither is consistently ahead; on SIFT1M SA-AQEE-FCM-S has the higher
+    overlap and they have the higher NN@1.
+  * Evolution: with it, NDCG@10 is higher by 0.001 to 0.007 on SciFact and NQ and within 0.002 either way on NFCorpus.
+  * Spherical FCM without soft assignment is a little below K-Means on NQ and NFCorpus.
+* The first default (membership rule, fixed before any run) was below K-Means on NFCorpus by up to 0.006 and at one
+  NQ point; those runs are in the git history (commit 7b856cb).
+* Giving every document a second copy (2x index) did not do better than the default on NQ or NFCorpus.
 * HNSW was not re-run for SA-AQEE-FCM-S.
 
 ### Earlier results

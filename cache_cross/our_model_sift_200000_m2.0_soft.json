@@ -5,7 +5,7 @@
     "overlap@10": 0.5727000000000001,
     "NN_in_top1": 0.629,
     "NN_in_top10": 0.629,
-    "ms_per_query": 1.0132942199707031,
+    "ms_per_query": 1.056298017501831,
     "avg_vectors_searched": 3396.488,
     "pct_of_base": 1.6982439999999999
   },
@@ -15,7 +15,7 @@
     "overlap@10": 0.7714000000000001,
     "NN_in_top1": 0.823,
     "NN_in_top10": 0.823,
-    "ms_per_query": 2.0349674224853516,
+    "ms_per_query": 2.016282558441162,
     "avg_vectors_searched": 6772.757,
     "pct_of_base": 3.3863784999999997
   },
@@ -25,7 +25,7 @@
     "overlap@10": 0.9154000000000001,
     "NN_in_top1": 0.942,
     "NN_in_top10": 0.942,
-    "ms_per_query": 4.105645656585693,
+    "ms_per_query": 4.051519393920898,
     "avg_vectors_searched": 13484.248,
     "pct_of_base": 6.7421240000000004
   },
@@ -35,7 +35,7 @@
     "overlap@10": 0.9839000000000001,
     "NN_in_top1": 0.995,
     "NN_in_top10": 0.995,
-    "ms_per_query": 8.127288818359375,
+    "ms_per_query": 8.177032947540283,
     "avg_vectors_searched": 26788.047,
     "pct_of_base": 13.3940235
   },
@@ -45,7 +45,7 @@
     "overlap@10": 0.9067000000000001,
     "NN_in_top1": 0.908,
     "NN_in_top10": 0.908,
-    "ms_per_query": 22.69134497642517,
+    "ms_per_query": 22.561317682266235,
     "avg_vectors_searched": 76733.637,
     "pct_of_base": 38.3668185
   },
@@ -55,7 +55,7 @@
     "overlap@10": 0.9184,
     "NN_in_top1": 0.918,
     "NN_in_top10": 0.918,
-    "ms_per_query": 23.77668786048889,
+    "ms_per_query": 22.711021900177002,
     "avg_vectors_searched": 77849.388,
     "pct_of_base": 38.924694
   },
@@ -65,7 +65,7 @@
     "overlap@10": 0.9215,
     "NN_in_top1": 0.921,
     "NN_in_top10": 0.921,
-    "ms_per_query": 25.290306568145752,
+    "ms_per_query": 36.55762028694153,
     "avg_vectors_searched": 78247.341,
     "pct_of_base": 39.123670499999996
   },
@@ -75,7 +75,7 @@
     "overlap@10": 0.9227000000000001,
     "NN_in_top1": 0.922,
     "NN_in_top10": 0.922,
-    "ms_per_query": 23.356600284576416,
+    "ms_per_query": 38.241591930389404,
     "avg_vectors_searched": 78374.508,
     "pct_of_base": 39.187253999999996
   },
@@ -85,7 +85,7 @@
     "overlap@10": 0.5839,
     "NN_in_top1": 0.619,
     "NN_in_top10": 0.619,
-    "ms_per_query": 1.0006625652313232,
+    "ms_per_query": 1.9420607089996338,
     "avg_vectors_searched": 3352.646,
     "pct_of_base": 1.6763230000000002
   },
@@ -95,7 +95,7 @@
     "overlap@10": 0.7741000000000001,
     "NN_in_top1": 0.812,
     "NN_in_top10": 0.812,
-    "ms_per_query": 2.013901710510254,
+    "ms_per_query": 3.5438735485076904,
     "avg_vectors_searched": 6703.827,
     "pct_of_base": 3.3519135
   },
@@ -105,7 +105,7 @@
     "overlap@10": 0.9164000000000001,
     "NN_in_top1": 0.931,
     "NN_in_top10": 0.931,
-    "ms_per_query": 4.07754111289978,
+    "ms_per_query": 8.153685808181763,
     "avg_vectors_searched": 13349.707,
     "pct_of_base": 6.674853499999999
   },
@@ -115,7 +115,7 @@
     "overlap@10": 0.9839000000000001,
     "NN_in_top1": 0.99,
     "NN_in_top10": 0.99,
-    "ms_per_query": 8.17006802558899,
+    "ms_per_query": 15.277674674987793,
     "avg_vectors_searched": 26639.564,
     "pct_of_base": 13.319782
   },
@@ -125,7 +125,7 @@
     "overlap@10": 0.6412,
     "NN_in_top1": 0.669,
     "NN_in_top10": 0.669,
-    "ms_per_query": 1.2612972259521484,
+    "ms_per_query": 2.4719338417053223,
     "avg_vectors_searched": 4188.722,
     "pct_of_base": 2.0943609999999997
   },
@@ -135,7 +135,7 @@
     "overlap@10": 0.8239,
     "NN_in_top1": 0.852,
     "NN_in_top10": 0.852,
-    "ms_per_query": 2.455535888671875,
+    "ms_per_query": 4.223047971725464,
     "avg_vectors_searched": 8409.948,
     "pct_of_base": 4.204974
   },
@@ -145,7 +145,7 @@
     "overlap@10": 0.9439,
     "NN_in_top1": 0.957,
     "NN_in_top10": 0.957,
-    "ms_per_query": 5.011197566986084,
+    "ms_per_query": 7.73426365852356,
     "avg_vectors_searched": 16829.697,
     "pct_of_base": 8.4148485
   },
@@ -155,49 +155,49 @@
     "overlap@10": 0.9915999999999999,
     "NN_in_top1": 0.997,
     "NN_in_top10": 0.997,
-    "ms_per_query": 10.904561996459961,
+    "ms_per_query": 16.42489719390869,
     "avg_vectors_searched": 33729.177,
     "pct_of_base": 16.8645885
   },
   {
     "method": "ours: SA-AQEE-FCM-S",
     "params": "K=64, rho=0.25 soar, x1.25, search=1",
-    "overlap@10": 0.6402,
-    "NN_in_top1": 0.676,
-    "NN_in_top10": 0.676,
-    "ms_per_query": 1.377331018447876,
-    "avg_vectors_searched": 4156.179,
-    "pct_of_base": 2.0780895
+    "overlap@10": 0.6428,
+    "NN_in_top1": 0.681,
+    "NN_in_top10": 0.681,
+    "ms_per_query": 2.289114475250244,
+    "avg_vectors_searched": 4168.577,
+    "pct_of_base": 2.0842885
   },
   {
     "method": "ours: SA-AQEE-FCM-S",
     "params": "K=64, rho=0.25 soar, x1.25, search=2",
-    "overlap@10": 0.8246,
-    "NN_in_top1": 0.857,
-    "NN_in_top10": 0.857,
-    "ms_per_query": 3.1879000663757324,
-    "avg_vectors_searched": 8319.538,
-    "pct_of_base": 4.159769
+    "overlap@10": 0.8258,
+    "NN_in_top1": 0.861,
+    "NN_in_top10": 0.861,
+    "ms_per_query": 4.803850412368774,
+    "avg_vectors_searched": 8354.716,
+    "pct_of_base": 4.177358000000001
   },
   {
     "method": "ours: SA-AQEE-FCM-S",
     "params": "K=64, rho=0.25 soar, x1.25, search=4",
-    "overlap@10": 0.9445,
-    "NN_in_top1": 0.958,
-    "NN_in_top10": 0.958,
-    "ms_per_query": 6.089554786682129,
-    "avg_vectors_searched": 16614.579,
-    "pct_of_base": 8.307289500000001
+    "overlap@10": 0.9442,
+    "NN_in_top1": 0.959,
+    "NN_in_top10": 0.959,
+    "ms_per_query": 12.177459716796875,
+    "avg_vectors_searched": 16701.244,
+    "pct_of_base": 8.350622
   },
   {
     "method": "ours: SA-AQEE-FCM-S",
     "params": "K=64, rho=0.25 soar, x1.25, search=8",
-    "overlap@10": 0.9912,
+    "overlap@10": 0.9914000000000001,
     "NN_in_top1": 0.996,
     "NN_in_top10": 0.996,
-    "ms_per_query": 12.05971384048462,
-    "avg_vectors_searched": 33241.703,
-    "pct_of_base": 16.6208515
+    "ms_per_query": 23.365593671798706,
+    "avg_vectors_searched": 33448.131,
+    "pct_of_base": 16.724065500000002
   },
   {
     "method": "ours: SA-AQEE-FCM-S",
@@ -205,7 +205,7 @@
     "overlap@10": 0.6894,
     "NN_in_top1": 0.735,
     "NN_in_top10": 0.735,
-    "ms_per_query": 1.7570433616638184,
+    "ms_per_query": 2.4556472301483154,
     "avg_vectors_searched": 5038.865,
     "pct_of_base": 2.5194325
   },
@@ -215,7 +215,7 @@
     "overlap@10": 0.8619,
     "NN_in_top1": 0.887,
     "NN_in_top10": 0.887,
-    "ms_per_query": 3.5040836334228516,
+    "ms_per_query": 5.069221019744873,
     "avg_vectors_searched": 10147.993,
     "pct_of_base": 5.0739965
   },
@@ -225,7 +225,7 @@
     "overlap@10": 0.9637,
     "NN_in_top1": 0.975,
     "NN_in_top10": 0.975,
-    "ms_per_query": 6.917491674423218,
+    "ms_per_query": 10.520839214324951,
     "avg_vectors_searched": 20354.066,
     "pct_of_base": 10.177033
   },
@@ -235,49 +235,49 @@
     "overlap@10": 0.9955,
     "NN_in_top1": 0.999,
     "NN_in_top10": 0.999,
-    "ms_per_query": 13.717563152313232,
+    "ms_per_query": 18.89173698425293,
     "avg_vectors_searched": 40856.453,
     "pct_of_base": 20.4282265
   },
   {
     "method": "ours: SA-AQEE-FCM-S",
     "params": "K=64, rho=0.5 soar, x1.50, search=1",
-    "overlap@10": 0.6889,
-    "NN_in_top1": 0.742,
-    "NN_in_top10": 0.742,
-    "ms_per_query": 1.715998649597168,
-    "avg_vectors_searched": 4974.714,
-    "pct_of_base": 2.4873570000000003
+    "overlap@10": 0.6927000000000001,
+    "NN_in_top1": 0.745,
+    "NN_in_top10": 0.745,
+    "ms_per_query": 2.749473810195923,
+    "avg_vectors_searched": 4998.839,
+    "pct_of_base": 2.4994195
   },
   {
     "method": "ours: SA-AQEE-FCM-S",
     "params": "K=64, rho=0.5 soar, x1.50, search=2",
-    "overlap@10": 0.8677,
-    "NN_in_top1": 0.901,
-    "NN_in_top10": 0.901,
-    "ms_per_query": 3.6070749759674072,
-    "avg_vectors_searched": 9964.224,
-    "pct_of_base": 4.982112
+    "overlap@10": 0.8672000000000001,
+    "NN_in_top1": 0.899,
+    "NN_in_top10": 0.899,
+    "ms_per_query": 4.843185901641846,
+    "avg_vectors_searched": 10034.446,
+    "pct_of_base": 5.0172229999999995
   },
   {
     "method": "ours: SA-AQEE-FCM-S",
     "params": "K=64, rho=0.5 soar, x1.50, search=4",
-    "overlap@10": 0.9669000000000001,
-    "NN_in_top1": 0.98,
-    "NN_in_top10": 0.98,
-    "ms_per_query": 7.253131866455078,
-    "avg_vectors_searched": 19919.766,
-    "pct_of_base": 9.959883
+    "overlap@10": 0.9657,
+    "NN_in_top1": 0.978,
+    "NN_in_top10": 0.978,
+    "ms_per_query": 9.280544996261597,
+    "avg_vectors_searched": 20095.64,
+    "pct_of_base": 10.04782
   },
   {
     "method": "ours: SA-AQEE-FCM-S",
     "params": "K=64, rho=0.5 soar, x1.50, search=8",
-    "overlap@10": 0.996,
+    "overlap@10": 0.9957999999999999,
     "NN_in_top1": 0.998,
     "NN_in_top10": 0.998,
-    "ms_per_query": 11.877247095108032,
-    "avg_vectors_searched": 39894.051,
-    "pct_of_base": 19.9470255
+    "ms_per_query": 18.135182857513428,
+    "avg_vectors_searched": 40308.493,
+    "pct_of_base": 20.154246500000003
   },
   {
     "method": "ours: SA-AQEE-FCM-S",
@@ -285,7 +285,7 @@
     "overlap@10": 0.7616,
     "NN_in_top1": 0.801,
     "NN_in_top10": 0.801,
-    "ms_per_query": 2.046700954437256,
+    "ms_per_query": 3.4270360469818115,
     "avg_vectors_searched": 6713.191,
     "pct_of_base": 3.3565955
   },
@@ -295,7 +295,7 @@
     "overlap@10": 0.9003000000000001,
     "NN_in_top1": 0.916,
     "NN_in_top10": 0.916,
-    "ms_per_query": 3.7647910118103027,
+    "ms_per_query": 6.411599397659302,
     "avg_vectors_searched": 13600.329,
     "pct_of_base": 6.800164499999999
   },
@@ -305,7 +305,7 @@
     "overlap@10": 0.9769000000000001,
     "NN_in_top1": 0.982,
     "NN_in_top10": 0.982,
-    "ms_per_query": 7.087672710418701,
+    "ms_per_query": 12.286327600479126,
     "avg_vectors_searched": 27197.758,
     "pct_of_base": 13.598879000000002
   },
@@ -315,49 +315,49 @@
     "overlap@10": 0.9978999999999999,
     "NN_in_top1": 1.0,
     "NN_in_top10": 1.0,
-    "ms_per_query": 12.67934775352478,
+    "ms_per_query": 21.27560043334961,
     "avg_vectors_searched": 54281.87,
     "pct_of_base": 27.140935
   },
   {
     "method": "ours: SA-AQEE-FCM-S",
     "params": "K=64, rho=1 soar, x2.00, search=1",
-    "overlap@10": 0.7611,
-    "NN_in_top1": 0.797,
-    "NN_in_top10": 0.797,
-    "ms_per_query": 2.0297534465789795,
-    "avg_vectors_searched": 6599.036,
-    "pct_of_base": 3.299518
+    "overlap@10": 0.7679000000000001,
+    "NN_in_top1": 0.806,
+    "NN_in_top10": 0.806,
+    "ms_per_query": 3.3545777797698975,
+    "avg_vectors_searched": 6640.691,
+    "pct_of_base": 3.3203454999999997
   },
   {
     "method": "ours: SA-AQEE-FCM-S",
     "params": "K=64, rho=1 soar, x2.00, search=2",
-    "overlap@10": 0.9105000000000001,
-    "NN_in_top1": 0.933,
-    "NN_in_top10": 0.933,
-    "ms_per_query": 3.791501998901367,
-    "avg_vectors_searched": 13246.442,
-    "pct_of_base": 6.623221
+    "overlap@10": 0.9101,
+    "NN_in_top1": 0.931,
+    "NN_in_top10": 0.931,
+    "ms_per_query": 6.50403094291687,
+    "avg_vectors_searched": 13382.165,
+    "pct_of_base": 6.6910825
   },
   {
     "method": "ours: SA-AQEE-FCM-S",
     "params": "K=64, rho=1 soar, x2.00, search=4",
-    "overlap@10": 0.982,
-    "NN_in_top1": 0.989,
-    "NN_in_top10": 0.989,
-    "ms_per_query": 7.754676818847656,
-    "avg_vectors_searched": 26409.624,
-    "pct_of_base": 13.204811999999999
+    "overlap@10": 0.9809,
+    "NN_in_top1": 0.987,
+    "NN_in_top10": 0.987,
+    "ms_per_query": 11.801095962524414,
+    "avg_vectors_searched": 26731.984,
+    "pct_of_base": 13.365992
   },
   {
     "method": "ours: SA-AQEE-FCM-S",
     "params": "K=64, rho=1 soar, x2.00, search=8",
-    "overlap@10": 0.9983,
+    "overlap@10": 0.9982000000000001,
     "NN_in_top1": 0.999,
     "NN_in_top10": 0.999,
-    "ms_per_query": 16.314915895462036,
-    "avg_vectors_searched": 52619.382,
-    "pct_of_base": 26.309691
+    "ms_per_query": 21.416711568832397,
+    "avg_vectors_searched": 53341.569,
+    "pct_of_base": 26.670784500000003
   },
   {
     "method": "K-Means + same spill",
@@ -365,7 +365,7 @@
     "overlap@10": 0.5727000000000001,
     "NN_in_top1": 0.629,
     "NN_in_top10": 0.629,
-    "ms_per_query": 1.0285050868988037,
+    "ms_per_query": 1.6840341091156006,
     "avg_vectors_searched": 3396.464,
     "pct_of_base": 1.6982320000000002
   },
@@ -375,7 +375,7 @@
     "overlap@10": 0.7714000000000001,
     "NN_in_top1": 0.823,
     "NN_in_top10": 0.823,
-    "ms_per_query": 2.0913569927215576,
+    "ms_per_query": 3.4894113540649414,
     "avg_vectors_searched": 6772.752,
     "pct_of_base": 3.3863760000000003
   },
@@ -385,7 +385,7 @@
     "overlap@10": 0.9154000000000001,
     "NN_in_top1": 0.942,
     "NN_in_top10": 0.942,
-    "ms_per_query": 4.071272850036621,
+    "ms_per_query": 6.696659803390503,
     "avg_vectors_searched": 13484.264,
     "pct_of_base": 6.742132
   },
@@ -395,7 +395,7 @@
     "overlap@10": 0.9839000000000001,
     "NN_in_top1": 0.995,
     "NN_in_top10": 0.995,
-    "ms_per_query": 8.134136438369751,
+    "ms_per_query": 9.846631050109863,
     "avg_vectors_searched": 26788.079,
     "pct_of_base": 13.394039500000002
   },
@@ -405,7 +405,7 @@
     "overlap@10": 0.6345999999999999,
     "NN_in_top1": 0.696,
     "NN_in_top10": 0.696,
-    "ms_per_query": 1.278388261795044,
+    "ms_per_query": 1.3131558895111084,
     "avg_vectors_searched": 4255.854,
     "pct_of_base": 2.127927
   },
@@ -415,7 +415,7 @@
     "overlap@10": 0.8207000000000001,
     "NN_in_top1": 0.871,
     "NN_in_top10": 0.871,
-    "ms_per_query": 2.5004372596740723,
+    "ms_per_query": 2.4945802688598633,
     "avg_vectors_searched": 8527.288,
     "pct_of_base": 4.263644
   },
@@ -425,7 +425,7 @@
     "overlap@10": 0.9437000000000001,
     "NN_in_top1": 0.967,
     "NN_in_top10": 0.967,
-    "ms_per_query": 5.033811092376709,
+    "ms_per_query": 4.911105155944824,
     "avg_vectors_searched": 17047.501,
     "pct_of_base": 8.5237505
   },
@@ -435,39 +435,39 @@
     "overlap@10": 0.9912000000000001,
     "NN_in_top1": 0.996,
     "NN_in_top10": 0.996,
-    "ms_per_query": 10.631227016448975,
+    "ms_per_query": 22.00671625137329,
     "avg_vectors_searched": 34029.313,
     "pct_of_base": 17.0146565
   },
   {
     "method": "K-Means + same spill",
     "params": "K=64, rho=0.25 soar, x1.25, search=1",
-    "overlap@10": 0.6317,
-    "NN_in_top1": 0.694,
-    "NN_in_top10": 0.694,
-    "ms_per_query": 1.317375898361206,
-    "avg_vectors_searched": 4225.56,
-    "pct_of_base": 2.1127800000000003
+    "overlap@10": 0.6354000000000001,
+    "NN_in_top1": 0.697,
+    "NN_in_top10": 0.697,
+    "ms_per_query": 2.5769097805023193,
+    "avg_vectors_searched": 4238.286,
+    "pct_of_base": 2.1191429999999998
   },
   {
     "method": "K-Means + same spill",
     "params": "K=64, rho=0.25 soar, x1.25, search=2",
-    "overlap@10": 0.8214000000000001,
-    "NN_in_top1": 0.87,
-    "NN_in_top10": 0.87,
-    "ms_per_query": 2.7833750247955322,
-    "avg_vectors_searched": 8431.857,
-    "pct_of_base": 4.2159284999999995
+    "overlap@10": 0.8229000000000001,
+    "NN_in_top1": 0.874,
+    "NN_in_top10": 0.874,
+    "ms_per_query": 6.662393808364868,
+    "avg_vectors_searched": 8470.483,
+    "pct_of_base": 4.2352415
   },
   {
     "method": "K-Means + same spill",
     "params": "K=64, rho=0.25 soar, x1.25, search=4",
-    "overlap@10": 0.9448000000000001,
-    "NN_in_top1": 0.97,
-    "NN_in_top10": 0.97,
-    "ms_per_query": 5.794690847396851,
-    "avg_vectors_searched": 16822.281,
-    "pct_of_base": 8.4111405
+    "overlap@10": 0.9454000000000001,
+    "NN_in_top1": 0.971,
+    "NN_in_top10": 0.971,
+    "ms_per_query": 13.65183424949646,
+    "avg_vectors_searched": 16916.714,
+    "pct_of_base": 8.458357
   },
   {
     "method": "K-Means + same spill",
@@ -475,9 +475,9 @@
     "overlap@10": 0.9915999999999999,
     "NN_in_top1": 0.997,
     "NN_in_top10": 0.997,
-    "ms_per_query": 11.450764417648315,
-    "avg_vectors_searched": 33534.137,
-    "pct_of_base": 16.7670685
+    "ms_per_query": 22.43038058280945,
+    "avg_vectors_searched": 33750.676,
+    "pct_of_base": 16.875338
   },
   {
     "method": "K-Means + same spill",
@@ -485,7 +485,7 @@
     "overlap@10": 0.6864,
     "NN_in_top1": 0.757,
     "NN_in_top10": 0.757,
-    "ms_per_query": 1.6862058639526367,
+    "ms_per_query": 3.1734349727630615,
     "avg_vectors_searched": 5102.619,
     "pct_of_base": 2.5513095
   },
@@ -495,7 +495,7 @@
     "overlap@10": 0.8608,
     "NN_in_top1": 0.907,
     "NN_in_top10": 0.907,
-    "ms_per_query": 3.409956216812134,
+    "ms_per_query": 6.437942028045654,
     "avg_vectors_searched": 10262.83,
     "pct_of_base": 5.131415
   },
@@ -505,7 +505,7 @@
     "overlap@10": 0.9622999999999999,
     "NN_in_top1": 0.975,
     "NN_in_top10": 0.975,
-    "ms_per_query": 7.137010097503662,
+    "ms_per_query": 10.69594430923462,
     "avg_vectors_searched": 20564.811,
     "pct_of_base": 10.282405500000001
   },
@@ -515,49 +515,49 @@
     "overlap@10": 0.9956,
     "NN_in_top1": 0.998,
     "NN_in_top10": 0.998,
-    "ms_per_query": 13.467169523239136,
+    "ms_per_query": 18.39012098312378,
     "avg_vectors_searched": 41146.267,
     "pct_of_base": 20.5731335
   },
   {
     "method": "K-Means + same spill",
     "params": "K=64, rho=0.5 soar, x1.50, search=1",
-    "overlap@10": 0.6820999999999999,
-    "NN_in_top1": 0.741,
-    "NN_in_top10": 0.741,
-    "ms_per_query": 1.7264626026153564,
-    "avg_vectors_searched": 5045.413,
-    "pct_of_base": 2.5227064999999995
+    "overlap@10": 0.6862999999999999,
+    "NN_in_top1": 0.75,
+    "NN_in_top10": 0.75,
+    "ms_per_query": 2.8724279403686523,
+    "avg_vectors_searched": 5068.957,
+    "pct_of_base": 2.5344785
   },
   {
     "method": "K-Means + same spill",
     "params": "K=64, rho=0.5 soar, x1.50, search=2",
-    "overlap@10": 0.8622000000000001,
-    "NN_in_top1": 0.907,
-    "NN_in_top10": 0.907,
-    "ms_per_query": 3.0134830474853516,
-    "avg_vectors_searched": 10077.181,
-    "pct_of_base": 5.038590500000001
+    "overlap@10": 0.8639000000000001,
+    "NN_in_top1": 0.91,
+    "NN_in_top10": 0.91,
+    "ms_per_query": 5.294549226760864,
+    "avg_vectors_searched": 10152.871,
+    "pct_of_base": 5.0764355
   },
   {
     "method": "K-Means + same spill",
     "params": "K=64, rho=0.5 soar, x1.50, search=4",
-    "overlap@10": 0.9647,
+    "overlap@10": 0.9648000000000001,
     "NN_in_top1": 0.983,
     "NN_in_top10": 0.983,
-    "ms_per_query": 6.475617170333862,
-    "avg_vectors_searched": 20126.273,
-    "pct_of_base": 10.0631365
+    "ms_per_query": 10.311014890670776,
+    "avg_vectors_searched": 20313.101,
+    "pct_of_base": 10.1565505
   },
   {
     "method": "K-Means + same spill",
     "params": "K=64, rho=0.5 soar, x1.50, search=8",
-    "overlap@10": 0.9962,
+    "overlap@10": 0.9963,
     "NN_in_top1": 0.999,
     "NN_in_top10": 0.999,
-    "ms_per_query": 13.275866270065308,
-    "avg_vectors_searched": 40190.337,
-    "pct_of_base": 20.0951685
+    "ms_per_query": 19.56580400466919,
+    "avg_vectors_searched": 40614.129,
+    "pct_of_base": 20.3070645
   },
   {
     "method": "K-Means + same spill",
@@ -565,7 +565,7 @@
     "overlap@10": 0.758,
     "NN_in_top1": 0.81,
     "NN_in_top10": 0.81,
-    "ms_per_query": 2.007941484451294,
+    "ms_per_query": 3.859429359436035,
     "avg_vectors_searched": 6773.533,
     "pct_of_base": 3.3867665000000002
   },
@@ -575,7 +575,7 @@
     "overlap@10": 0.9001,
     "NN_in_top1": 0.932,
     "NN_in_top10": 0.932,
-    "ms_per_query": 3.8690569400787354,
+    "ms_per_query": 6.891972780227661,
     "avg_vectors_searched": 13737.156,
     "pct_of_base": 6.868578
   },
@@ -585,7 +585,7 @@
     "overlap@10": 0.9751000000000001,
     "NN_in_top1": 0.981,
     "NN_in_top10": 0.981,
-    "ms_per_query": 7.214369297027588,
+    "ms_per_query": 12.679566621780396,
     "avg_vectors_searched": 27568.747,
     "pct_of_base": 13.7843735
   },
@@ -595,39 +595,39 @@
     "overlap@10": 0.9977,
     "NN_in_top1": 0.999,
     "NN_in_top10": 0.999,
-    "ms_per_query": 13.05520486831665,
+    "ms_per_query": 20.783169507980347,
     "avg_vectors_searched": 54954.949,
     "pct_of_base": 27.477474500000003
   },
   {
     "method": "K-Means + same spill",
     "params": "K=64, rho=1 soar, x2.00, search=1",
-    "overlap@10": 0.7559000000000001,
-    "NN_in_top1": 0.791,
-    "NN_in_top10": 0.791,
-    "ms_per_query": 2.012913465499878,
-    "avg_vectors_searched": 6682.459,
-    "pct_of_base": 3.3412295000000003
+    "overlap@10": 0.7613000000000001,
+    "NN_in_top1": 0.803,
+    "NN_in_top10": 0.803,
+    "ms_per_query": 3.4876554012298584,
+    "avg_vectors_searched": 6720.535,
+    "pct_of_base": 3.3602675
   },
   {
     "method": "K-Means + same spill",
     "params": "K=64, rho=1 soar, x2.00, search=2",
-    "overlap@10": 0.9045,
-    "NN_in_top1": 0.931,
-    "NN_in_top10": 0.931,
-    "ms_per_query": 4.5984272956848145,
-    "avg_vectors_searched": 13385.831,
-    "pct_of_base": 6.692915500000001
+    "overlap@10": 0.9056000000000002,
+    "NN_in_top1": 0.935,
+    "NN_in_top10": 0.935,
+    "ms_per_query": 7.086718797683716,
+    "avg_vectors_searched": 13529.397,
+    "pct_of_base": 6.764698500000001
   },
   {
     "method": "K-Means + same spill",
     "params": "K=64, rho=1 soar, x2.00, search=4",
-    "overlap@10": 0.9797,
+    "overlap@10": 0.9794,
     "NN_in_top1": 0.989,
     "NN_in_top10": 0.989,
-    "ms_per_query": 7.261682510375977,
-    "avg_vectors_searched": 26731.2,
-    "pct_of_base": 13.3656
+    "ms_per_query": 13.688280582427979,
+    "avg_vectors_searched": 27089.131,
+    "pct_of_base": 13.544565500000001
   },
   {
     "method": "K-Means + same spill",
@@ -635,8 +635,8 @@
     "overlap@10": 0.9983,
     "NN_in_top1": 1.0,
     "NN_in_top10": 1.0,
-    "ms_per_query": 12.787484407424927,
-    "avg_vectors_searched": 53174.834,
-    "pct_of_base": 26.587417000000002
+    "ms_per_query": 21.291085958480835,
+    "avg_vectors_searched": 53963.874,
+    "pct_of_base": 26.981937000000002
   }
 ]
