@@ -379,7 +379,7 @@ def main():
     ap.add_argument("--gens", type=int, default=25)
     ap.add_argument("--refine_iters", type=int, default=3, help="FCM iterations before each fitness evaluation")
     ap.add_argument("--n_pseudo", type=int, default=1000, help="pseudo-queries for the evolution's fitness")
-    ap.add_argument("--km_iters", type=int, default=50)
+    ap.add_argument("--km_iters", type=int, default=50, help="K-Means iterations (the previous scripts used 20; 50 is a stronger baseline)")
     ap.add_argument("--skip_v5", action="store_true")
     ap.add_argument("--v5_fit_sample", type=int, default=0, help="30000 reproduces the published NQ run")
     ap.add_argument("--m_min", type=float, default=1.05, help="V5 only: floor of its fuzzifier")
@@ -420,6 +420,10 @@ def main():
           f"spill budgets {args.rhos} x {args.rules}", flush=True)
 
     rows, infos = [], []
+    t_start = time.time()
+
+    def say(msg):
+        print(f"[{time.time() - t_start:6.0f}s] {msg}", flush=True)
 
     def evaluate(seed, method, route, rho, rule, built, scores, index_x):
         for n in args.n_search:
@@ -435,6 +439,7 @@ def main():
         """rho = 0 plus every (rho, rule) for one set of centroids."""
         scores = route_scores(Qu, V, "cos")
         configs = [(0.0, "none")] + [(r, ru) for r in args.rhos for ru in args.rules]
+        say(f"{method}: searching {len(configs)} spill settings x {len(args.n_search)} cluster counts")
         for rho, rule in configs:
             ed, ec, _, info = spill_entries(Xu, V, "cos", rho, rule if rho > 0 else "membership", args.tau,
                                             args.soar_lambda, rng)
@@ -443,42 +448,44 @@ def main():
             built = build_spilled_index(d32, ed, ec, C)
             evaluate(seed, method, "ip", rho, rule, built, scores, info["index_x"])
             del built
-            print(f"  {method:28s} rho {rho:4.2f} {rule:10s} m_assign {info['m_assign']:7.3f} "
-                  f"spilled {info['spill_share']:.3f} index x{info['index_x']:.2f}", flush=True)
+            say(f"  {method:28s} rho {rho:4.2f} {rule:10s} m_assign {info['m_assign']:7.3f} "
+                f"spilled {info['spill_share']:.3f} index x{info['index_x']:.2f}")
 
     for seed in args.seeds:
         print(f"\n=== seed {seed} ===", flush=True)
         rng = np.random.default_rng(seed)
         probe = make_probe(Xu, rng, "cos", args.fit_sample, args.n_pseudo)
         # ---- K-Means, as in the previous scripts, routed both ways; its spill uses the identical rule
-        with contextlib.redirect_stdout(io.StringIO()):
-            km = KMeansScratch(n_clusters=C, max_iters=args.km_iters, random_state=seed).fit(d_emb)
+        say(f"seed {seed}: fitting K-Means (k={C}, up to {args.km_iters} iterations, one line per iteration)")
+        km = KMeansScratch(n_clusters=C, max_iters=args.km_iters, random_state=seed).fit(d_emb)
         Vk = km.cluster_centers_.astype(np.float64)
         lab = km.labels_
         built = build_spilled_index(d32, np.arange(n_docs), lab, C)
         evaluate(seed, KM, "ip", 0.0, "none", built, route_scores(Q, Vk, "cos"), 1.0)
         evaluate(seed, KM, "l2", 0.0, "none", built, -sqdist(Q, Vk), 1.0)
         del built
-        print(f"  K-Means fitted (sizes min/max {np.bincount(lab, minlength=C).min()}/"
-              f"{np.bincount(lab, minlength=C).max()})", flush=True)
+        say(f"K-Means fitted and searched (sizes min/max {np.bincount(lab, minlength=C).min()}/"
+            f"{np.bincount(lab, minlength=C).max()})")
         run_spills(seed, KMS, Vk, np.random.default_rng(seed))
         # ---- the previous SA-AQEE-FCM, for continuity
         if not args.skip_v5:
             from sa_aqee_fcm import sa_aqee_fcm
+            say(f"seed {seed}: fitting SA-AQEE-FCM V5 (the previous method)")
             res = sa_aqee_fcm(X, C, "V5", np.random.default_rng(seed), sample=2000, fit_sample=args.v5_fit_sample,
                               m_min=args.m_min, verbose=False)
             built = build_spilled_index(d32, np.arange(n_docs), res["labels"], C)
             evaluate(seed, V5, "l2", 0.0, "none", built, -sqdist(Q, res["V"]), 1.0)
             del built
-            print(f"  V5 fitted (m* {res['m']:.3f})", flush=True)
+            say(f"V5 fitted and searched (m* {res['m']:.3f})")
         # ---- ours, and ours without the evolution
         for method, use_qiea in ((OURS, True), (NOQ, False)):
             if method == NOQ and args.skip_noqiea:
                 continue
+            say(f"seed {seed}: fitting {method}" + (" (evolution, then FCM on all documents)" if use_qiea else ""))
             fit = fit_sa_aqee_soft(Xu, C, np.random.default_rng(seed), probe, "cos", use_qiea, args.m_fit,
                                    pop=args.pop, gens=args.gens, refine_iters=args.refine_iters, verbose=use_qiea)
-            print(f"  {method}: seed fitness {fit['seed_fitness']:.4f} -> {fit['best_fitness']:.4f} "
-                  f"({fit['evo_time']:.0f}s)", flush=True)
+            say(f"{method} fitted: seed fitness {fit['seed_fitness']:.4f} -> {fit['best_fitness']:.4f} "
+                f"(evolution {fit['evo_time']:.0f}s)")
             run_spills(seed, method, fit["V"], np.random.default_rng(seed))
 
     # ---------------------------------------------------------------- mean over seeds
