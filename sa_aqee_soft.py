@@ -356,7 +356,7 @@ def synthetic_data(n_docs=20000, n_queries=1000, dim=64, n_topics=48, seed=0):
 
 
 # ------------------------------------------------------------------------------------ main
-OURS, NOQ, KM, KMS, V5 = ("SA-AQEE-FCM-S (ours)", "SA-AQEE-FCM-S without QIEA", "K-Means (previous)",
+OURS, NOQ, KM, KMS, V5 = ("SA-AQEE-FCM-S (proposed)", "SA-AQEE-FCM-S without QIEA", "K-Means (previous)",
                           "K-Means + same spill", "SA-AQEE-FCM V5 (previous)")
 
 
@@ -537,17 +537,17 @@ def main():
         return dict(points=out, wins=wins, total=total)
 
     is_km = lambda a: a["method"] == KM                               # noqa: E731  (both routings)
-    h2h = {"vs_kmeans": versus("OURS AGAINST THE BEST K-MEANS CURVE (either routing) AT THE SAME DOCS SEARCHED",
+    h2h = {"vs_kmeans": versus("PROPOSED METHOD AGAINST THE BEST K-MEANS CURVE (either routing) AT THE SAME DOCS SEARCHED",
                                lambda a: a["method"] == OURS, lambda a: is_km)}
     h2h["kmeans_spill_vs_kmeans"] = versus("K-MEANS + SAME SPILL AGAINST PLAIN K-MEANS (how much the spill alone gives)",
                                            lambda a: a["method"] == KMS and a["rho"] > 0, lambda a: is_km)
     h2h["vs_kmeans_spill"] = versus(
-        "ATTRIBUTION: OURS AGAINST K-MEANS WITH THE IDENTICAL SPILL (same rho and rule)",
+        "ATTRIBUTION: PROPOSED METHOD AGAINST K-MEANS WITH THE IDENTICAL SPILL (same rho and rule)",
         lambda a: a["method"] == OURS,
         lambda a: (lambda b, a=a: b["method"] == KMS and b["rho"] == a["rho"] and b["rule"] == a["rule"]))
     if not args.skip_noqiea:
         h2h["vs_no_qiea"] = versus(
-            "ATTRIBUTION: OURS AGAINST OURS WITHOUT THE QIEA (same rho and rule)",
+            "ATTRIBUTION: PROPOSED METHOD AGAINST ITSELF WITHOUT THE QIEA (same rho and rule)",
             lambda a: a["method"] == OURS,
             lambda a: (lambda b, a=a: b["method"] == NOQ and b["rho"] == a["rho"] and b["rule"] == a["rule"]))
 
@@ -555,7 +555,7 @@ def main():
     dr, du = args.default_rho, args.default_rule
     if any(a["method"] == OURS and a["rho"] == dr and a["rule"] == du for a in agg):
         h2h["default_vs_kmeans"] = versus(
-            f"HEADLINE: OURS WITH THE PRE-SET DEFAULT (rho {dr:.2f}, {du}) AGAINST THE BEST K-MEANS CURVE",
+            f"HEADLINE: PROPOSED METHOD WITH THE PRE-SET DEFAULT (rho {dr:.2f}, {du}) AGAINST THE BEST K-MEANS CURVE",
             lambda a: a["method"] == OURS and a["rho"] == dr and a["rule"] == du, lambda a: is_km)
 
     os.makedirs("cache_cross", exist_ok=True)
