@@ -101,7 +101,30 @@ share of queries whose exact nearest neighbour comes first is also higher: 0.745
   `cache_cross/sa_aqee_soft_nfcorpus_scifact_setting.json`, and the first default (membership rule, fixed before any
   run) is in the git history (commit 7b856cb).
 * Giving every document a second copy (2x index) did worse than these settings on NQ and NFCorpus.
-* HNSW was not re-run for SA-AQEE-FCM-S.
+
+### Every method at equal cost
+`compare_methods.py` runs exhaustive search, Fuzzy C-Means (m = 2), FAISS IVF and HNSW on the same vectors, queries
+and evaluation and reads each method off its own best-quality-per-cost curve at the proposed method's costs (for HNSW
+the cost is its distance computations). NQ-200k at 4,899 documents compared per query (the proposed method at 1 cluster):
+
+| Method | NDCG@10 | MAP@10 | Recall@100 | P@10 |
+|---|---|---|---|---|
+| Exhaustive search (200,000 documents) | 0.7556 | 0.7032 | 0.9711 | 0.1080 |
+| K-Means | 0.5553 | 0.5188 | 0.6833 | 0.0770 |
+| Fuzzy C-Means (m = 2) | cannot reach this cost | | | |
+| FAISS IVF | 0.5394 | 0.5047 | 0.6589 | 0.0747 |
+| HNSW (graph index) | 0.7518 | 0.7000 | 0.9627 | 0.1074 |
+| SA-AQEE-FCM V5 (seeds 42, 43) | 0.5427 | 0.5076 | 0.6651 | 0.0751 |
+| K-Means + learned router (seed 42) | 0.5657 | 0.5294 | 0.6884 | 0.0777 |
+| SA-AQEE-FCM-S (proposed) | 0.5729 | 0.5358 | 0.7023 | 0.0794 |
+
+* Fuzzy C-Means collapses on all three text collections: its memberships equal the flat 1/C, and its cheapest setting
+  (1 cluster) already compares 35,476 documents on NQ (NDCG@10 0.357), 1,478 on SciFact and 317 on NFCorpus.
+* Over all four metrics at 5 cutoffs and 1 to 4 clusters, the proposed method is ahead of FAISS IVF in 80 of 80
+  comparisons on NQ, 78 of 80 on SciFact and 73 of 80 on NFCorpus.
+* HNSW is ahead of every clustering method, the proposed one included, at equal vectors compared on NQ and SciFact
+  (on NFCorpus its cheapest setting already compares 351 vectors).
+* Seed 44 of SA-AQEE-FCM V5 on NQ put about 95,000 documents in one cluster, so the V5 row uses seeds 42 and 43.
 
 ### Earlier results
 * SA-AQEE-FCM (V5) is close to K-Means on the text datasets (a little below it on NQ and NFCorpus, no consistent
