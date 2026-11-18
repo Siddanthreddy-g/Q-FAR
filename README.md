@@ -14,11 +14,12 @@ are embedded with `BAAI/bge-small-en-v1.5`.
 |---|---|
 | K-Means (previous method) | Hard clustering, `kmean_retrival.py` |
 | Fuzzy C-Means (previous method) | Soft clustering with a fixed fuzzifier m, `fuzzycmeans_scratch.py` |
-| SA-AQEE-FCM (ours) | Quantum-inspired evolutionary search with self-adaptive rotation and an adaptive fuzzifier, `sa_aqee_fcm.py` |
-| SA-AQEE-FCM-S (ours) | SA-AQEE-FCM with soft assignment of boundary documents, `sa_aqee_soft.py` (see below) |
+| SA-AQEE-FCM (V5, the original plan) | Quantum-inspired evolutionary search with self-adaptive rotation and an adaptive fuzzifier, `sa_aqee_fcm.py` |
+| SA-AQEE-FCM-S (proposed method) | SA-AQEE-FCM with soft assignment of boundary documents, `sa_aqee_soft.py` (see below) |
 | FAISS IVF, HNSW | Standard indexes, `their_ann_methods_on_our_data.py` |
 | Contriever, DPR, bge-small | Embedding models, `cross_test_their_models.py` |
 | Murali and Damodaram (2015) | Our reimplementation of their clustering method, `pfcm_murali_baseline.py` |
+| All of the above at equal cost | `compare_methods.py`: exhaustive search, FCM, FAISS IVF and HNSW next to K-Means, V5, SOAR and the proposed method, on all four metrics |
 
 ### SA-AQEE-FCM-S
 In SA-AQEE-FCM the fuzzifier settles at its floor (m* = 1.02), so the final partition is effectively K-Means, and the
@@ -61,7 +62,7 @@ lambda = 2; NQ has no development split in BEIR and uses the SciFact setting, as
 the same number of documents searched; mean of seeds 42, 43 and 44; K-Means runs 50 iterations and is scored with the
 better of its two routings. Points where K-Means has no result at a similar cost are left out.
 
-| Dataset | clusters searched | docs searched | NDCG@10 ours | NDCG@10 K-Means | difference | Recall@100 difference | index |
+| Dataset | clusters searched | docs searched | NDCG@10 proposed | NDCG@10 K-Means | difference | Recall@100 difference | index |
 |---|---|---|---|---|---|---|---|
 | SciFact | 1 | 472 | 0.5524 | 0.5381 | +0.0143 | +0.0192 | 1.50x |
 | SciFact | 2 | 943 | 0.6710 | 0.6566 | +0.0144 | +0.0257 | 1.50x |
@@ -92,8 +93,9 @@ share of queries whose exact nearest neighbour comes first is also higher: 0.745
   * Soft assignment: K-Means' own clusters with the same soft assignment also gain over plain K-Means. On NQ they are
     ahead of SA-AQEE-FCM-S by 0.003 to 0.004 at 2 to 4 clusters; SA-AQEE-FCM-S is ahead of them on SciFact by 0.008
     to 0.022 at 2 to 4 clusters, and on NFCorpus by 0.002 to 0.005 at 3 and 4 clusters (0.001 behind at 2).
-  * Evolution: with it, NDCG@10 is higher by 0.001 to 0.007 on SciFact and NQ; on NFCorpus it is 0.002 to 0.004
-    lower at 2 and 3 clusters and slightly higher beyond.
+  * Evolution: its effect is small and not consistent. With it, NDCG@10 is higher by 0.001 to 0.004 on NQ and by
+    0.002 to 0.007 on SciFact at 2 to 4 clusters, but at 1 cluster on SciFact the method without it is ahead by 0.025;
+    on NFCorpus it is 0.002 to 0.004 lower at 2 and 3 clusters and level at 1 and 4.
   * Spherical FCM without soft assignment is a little below K-Means on NQ and NFCorpus.
 * Earlier runs are kept: the SciFact setting on NFCorpus (51 of 80 four-metric comparisons ahead) is
   `cache_cross/sa_aqee_soft_nfcorpus_scifact_setting.json`, and the first default (membership rule, fixed before any
@@ -123,6 +125,9 @@ python sa_aqee_soft.py --dataset nfcorpus --k 64 --seeds 42 43 44 --default_rho 
 python sa_aqee_soft.py --dataset nq --subsample 200000 --emb_dir cache --k 64 --seeds 42 43 44 --v5_fit_sample 30000 --m_min 1.02
 python our_model_on_sift1m.py --sa_aqee_soft
 python dev_select_soft.py
+python compare_methods.py --dataset scifact
+python compare_methods.py --dataset nfcorpus --k 64
+python compare_methods.py --dataset nq --subsample 200000 --emb_dir cache --k 64
 ```
 `dev_select_soft.py` repeats the choice of the default setting on SciFact's train queries (it embeds them with
 all-MiniLM-L6-v2 through sentence-transformers). `sa_aqee_soft.py --synthetic` runs the whole pipeline on synthetic data as a quick check (those numbers are not
