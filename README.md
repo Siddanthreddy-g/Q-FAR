@@ -151,7 +151,14 @@ python dev_select_soft.py
 python compare_methods.py --dataset scifact
 python compare_methods.py --dataset nfcorpus --k 64
 python compare_methods.py --dataset nq --subsample 200000 --emb_dir cache --k 64
+python significance.py --dataset scifact
+python significance.py --dataset nfcorpus --k 64
+python significance.py --dataset nq --subsample 200000 --emb_dir cache --k 64
 ```
+`significance.py` re-runs the compared methods with the same seeds, keeps every query's scores and gives each
+difference a paired-bootstrap 95% confidence interval, bootstrap and Wilcoxon p-values and Holm's correction. It
+also tests the proposed method against the same partition with randomly chosen border documents, and reports index
+size and build time.
 `dev_select_soft.py` repeats the choice of the default setting on SciFact's train queries (it embeds them with
 all-MiniLM-L6-v2 through sentence-transformers). `sa_aqee_soft.py --synthetic` runs the whole pipeline on synthetic data as a quick check (those numbers are not
 results). `--data_path` loads a BEIR-format folder that is already on disk instead of downloading it.
