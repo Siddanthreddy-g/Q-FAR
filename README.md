@@ -126,6 +126,22 @@ the cost is its distance computations). NQ-200k at 4,899 documents compared per 
   (on NFCorpus its cheapest setting already compares 351 vectors).
 * Seed 44 of SA-AQEE-FCM V5 on NQ put about 95,000 documents in one cluster, so the V5 row uses seeds 42 and 43.
 
+### Significance (`significance.py`)
+Paired bootstrap over queries (10,000 resamples, 95% confidence intervals), Holm's correction over each method's four
+budgets; the re-run reproduces the means above to within 0.00001. NDCG@10 of the proposed method minus each method:
+* K-Means: significant on NQ (3,452 queries) at 1, 3 and 4 clusters, +0.018 [+0.010, +0.026] at 1 cluster; positive but
+  not significant on SciFact (300 queries) and NFCorpus (323).
+* FAISS IVF: significant on NQ at all four budgets (+0.011 to +0.034); not significant on the small collections.
+* The same partition with randomly chosen border documents (same number of copies): the fuzzy gate is significantly
+  better at all four budgets on NQ (+0.012 to +0.024), at 2 to 4 clusters on SciFact and at 4 on NFCorpus.
+* SOAR (2x index): significantly better at 2 clusters on NQ (+0.014), no significant difference elsewhere.
+* K-Means with the same soft assignment: no significant difference on NQ or NFCorpus; the proposed method is
+  significantly better on SciFact at 2 to 4 clusters.
+* Without the evolution: no significant difference, except SciFact at 1 cluster, where the version without it is
+  better (-0.024).
+* HNSW is significantly better everywhere it can be read. NQ index sizes: K-Means and FAISS IVF 295 MB, proposed 442 MB,
+  SOAR 589 MB, HNSW 345 MB.
+
 ### Earlier results
 * SA-AQEE-FCM (V5) is close to K-Means on the text datasets (a little below it on NQ and NFCorpus, no consistent
   difference on SciFact) and worse on SIFT1M. It does not beat K-Means or HNSW. In the new NQ runs, one seed (44,
