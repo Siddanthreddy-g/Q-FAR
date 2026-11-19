@@ -4,7 +4,7 @@ Author: G. Siddanth Reddy
 
 Q-FAR looks at a simple question: if a document collection is split into clusters and each query searches only the
 nearest few clusters, how much retrieval quality is lost compared with searching everything, and how does that compare
-with standard approximate-search indexes (FAISS IVF and HNSW)?
+with a standard partition-based index (FAISS IVF)?
 
 All clustering code (K-Means, Fuzzy C-Means, and SA-AQEE-FCM) is written from scratch in NumPy. Documents and queries
 are embedded with `BAAI/bge-small-en-v1.5`.
@@ -16,10 +16,10 @@ are embedded with `BAAI/bge-small-en-v1.5`.
 | Fuzzy C-Means (previous method) | Soft clustering with a fixed fuzzifier m, `fuzzycmeans_scratch.py` |
 | SA-AQEE-FCM (V5, the original plan) | Quantum-inspired evolutionary search with self-adaptive rotation and an adaptive fuzzifier, `sa_aqee_fcm.py` |
 | SA-AQEE-FCM-S (proposed method) | SA-AQEE-FCM with soft assignment of boundary documents, `sa_aqee_soft.py` (see below) |
-| FAISS IVF, HNSW | Standard indexes, `their_ann_methods_on_our_data.py` |
+| FAISS IVF | Standard partition-based index, `their_ann_methods_on_our_data.py` |
 | Contriever, DPR, bge-small | Embedding models, `cross_test_their_models.py` |
 | Murali and Damodaram (2015) | Our reimplementation of their clustering method, `pfcm_murali_baseline.py` |
-| All of the above at equal cost | `compare_methods.py`: exhaustive search, FCM, FAISS IVF and HNSW next to K-Means, V5, SOAR and the proposed method, on all four metrics |
+| All of the above at equal cost | `compare_methods.py`: exhaustive search, FCM and FAISS IVF next to K-Means, V5, SOAR and the proposed method, on all four metrics |
 
 ### SA-AQEE-FCM-S
 In SA-AQEE-FCM the fuzzifier settles at its floor (m* = 1.02), so the final partition is effectively K-Means, and the
@@ -103,9 +103,8 @@ share of queries whose exact nearest neighbour comes first is also higher: 0.745
 * Giving every document a second copy (2x index) did worse than these settings on NQ and NFCorpus.
 
 ### Every method at equal cost
-`compare_methods.py` runs exhaustive search, Fuzzy C-Means (m = 2), FAISS IVF and HNSW on the same vectors, queries
-and evaluation and reads each method off its own best-quality-per-cost curve at the proposed method's costs (for HNSW
-the cost is its distance computations). NQ-200k at 4,899 documents compared per query (the proposed method at 1 cluster):
+`compare_methods.py` runs exhaustive search, Fuzzy C-Means (m = 2) and FAISS IVF on the same vectors, queries and
+evaluation and reads each method off its own best-quality-per-cost curve at the proposed method's costs. NQ-200k at 4,899 documents compared per query (the proposed method at 1 cluster):
 
 | Method | NDCG@10 | MAP@10 | Recall@100 | P@10 |
 |---|---|---|---|---|
@@ -113,7 +112,6 @@ the cost is its distance computations). NQ-200k at 4,899 documents compared per 
 | K-Means | 0.5553 | 0.5188 | 0.6833 | 0.0770 |
 | Fuzzy C-Means (m = 2) | cannot reach this cost | | | |
 | FAISS IVF | 0.5394 | 0.5047 | 0.6589 | 0.0747 |
-| HNSW (graph index) | 0.7518 | 0.7000 | 0.9627 | 0.1074 |
 | SA-AQEE-FCM V5 (seeds 42, 43) | 0.5427 | 0.5076 | 0.6651 | 0.0751 |
 | K-Means + learned router (seed 42) | 0.5657 | 0.5294 | 0.6884 | 0.0777 |
 | SA-AQEE-FCM-S (proposed) | 0.5729 | 0.5358 | 0.7023 | 0.0794 |
@@ -122,8 +120,6 @@ the cost is its distance computations). NQ-200k at 4,899 documents compared per 
   (1 cluster) already compares 35,476 documents on NQ (NDCG@10 0.357), 1,478 on SciFact and 317 on NFCorpus.
 * Over all four metrics at 5 cutoffs and 1 to 4 clusters, the proposed method is ahead of FAISS IVF in 80 of 80
   comparisons on NQ, 78 of 80 on SciFact and 73 of 80 on NFCorpus.
-* HNSW is ahead of every clustering method, the proposed one included, at equal vectors compared on NQ and SciFact
-  (on NFCorpus its cheapest setting already compares 351 vectors).
 * Seed 44 of SA-AQEE-FCM V5 on NQ put about 95,000 documents in one cluster, so the V5 row uses seeds 42 and 43.
 
 ### Significance (`significance.py`)
@@ -139,12 +135,11 @@ budgets; the re-run reproduces the means above to within 0.00001. NDCG@10 of the
   significantly better on SciFact at 2 to 4 clusters.
 * Without the evolution: no significant difference, except SciFact at 1 cluster, where the version without it is
   better (-0.024).
-* HNSW is significantly better everywhere it can be read. NQ index sizes: K-Means and FAISS IVF 295 MB, proposed 442 MB,
-  SOAR 589 MB, HNSW 345 MB.
+* NQ index sizes: K-Means and FAISS IVF 295 MB, proposed 442 MB, SOAR 589 MB.
 
 ### Earlier results
 * SA-AQEE-FCM (V5) is close to K-Means on the text datasets (a little below it on NQ and NFCorpus, no consistent
-  difference on SciFact) and worse on SIFT1M. It does not beat K-Means or HNSW. In the new NQ runs, one seed (44,
+  difference on SciFact) and worse on SIFT1M. It does not beat K-Means. In the new NQ runs, one seed (44,
   m* = 1.105) produced a cluster so large that searching one cluster scanned about 95,000 documents on average.
 * Adaptive and learned routing improved both clusterings a little and did not change their ranking.
 
