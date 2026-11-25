@@ -137,6 +137,18 @@ budgets; the re-run reproduces the means above to within 0.00001. NDCG@10 of the
   better (-0.024).
 * NQ index sizes: K-Means and FAISS IVF 295 MB, proposed 442 MB, SOAR 589 MB.
 
+### FiQA: a new collection with the settings unchanged
+FiQA (57,638 documents, 648 queries, C = 64) was added after every setting had been frozen and run once with the
+SciFact setting (rho 0.5, SOAR, lambda 0.5; index 1.50x). NDCG@10 of the proposed method minus each method, at 1, 2, 3
+and 4 clusters (1,495, 3,013, 4,505 and 5,982 documents compared):
+* K-Means: +0.019, +0.015, +0.010, +0.009, significant at all four budgets (+0.019 [+0.008, +0.030] at 1 cluster);
+  ahead in 80 of 80 four-metric comparisons.
+* SOAR (2x index): +0.020, +0.010, +0.009 at 2 to 4 clusters, significant at all three; index 128 MB against 170 MB.
+* Randomly chosen border documents: +0.008, +0.010, +0.008, +0.005, significant at all four budgets.
+* FAISS IVF (+0.006 to +0.009) and K-Means with the same soft assignment (+0.004 to +0.009): ahead at every budget,
+  not significant after Holm's correction.
+* Without the evolution: +0.010 at 2 clusters (significant), +0.004 and +0.002 at 3 and 4 (not significant).
+
 ### Earlier results
 * SA-AQEE-FCM (V5) is close to K-Means on the text datasets (a little below it on NQ and NFCorpus, no consistent
   difference on SciFact) and worse on SIFT1M. It does not beat K-Means. In the new NQ runs, one seed (44,
@@ -165,6 +177,9 @@ python compare_methods.py --dataset nq --subsample 200000 --emb_dir cache --k 64
 python significance.py --dataset scifact
 python significance.py --dataset nfcorpus --k 64
 python significance.py --dataset nq --subsample 200000 --emb_dir cache --k 64
+python sa_aqee_soft.py --dataset fiqa --k 64 --seeds 42 43 44
+python compare_methods.py --dataset fiqa --k 64
+python significance.py --dataset fiqa --k 64
 ```
 `significance.py` re-runs the compared methods with the same seeds, keeps every query's scores and gives each
 difference a paired-bootstrap 95% confidence interval, bootstrap and Wilcoxon p-values and Holm's correction. It
